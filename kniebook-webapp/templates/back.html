@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block header_title %} kb Back-end {% endblock %}
+
+{% block header_content %}
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h1>kniebook</h1>
+			<h3>Back-end</h3>
+		</div>
+	</div>
+{% endblock %}
+
+{% block main_content %}
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<hr>
+			<h4>Nutzer</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-2">
+		</div>
+		<div class="col-md-8">
+			<h5 class="text-center">Angelegte Nutzer</h5>
+			{% if users %}
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Nr.</th>
+							<th>Nutzername</th>
+							<th>Passwort</th>
+							<th>Geburtsdatum</th>
+							<th>Avatar</th>
+						</tr>
+					</thead>
+					<tbody>
+					{% for entry in users %}
+						<tr>
+							<td>{{users.index(entry)+1}}</td>
+							<td>{{entry[0]}}</td>
+							<td>{{entry[1]}}</td>
+							<td>{{entry[2]}}</td>
+							<td><img src="images/avatare/{{entry[3]}}" class="img-responsive img-circle avatar-small"></td>
+						</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+			{% else %}
+				<p class="text-center">Leider wurden noch keine Nutzer angelegt</p>
+			{% endif %}
+		</div>
+		<div class="col-md-2">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h5>Nutzerkontrolle</h5>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 text-center">
+			<h5>Algorithmen</h5>
+			<form>
+				<button type="submit" name="btn-initialize-users" formmethod="get" value="on" class="btn btn-default">Initialisiere 5 Knierims + Admin</button>
+			</form>
+			<form>
+				<button type="submit" name="btn-delete-all-users" formmethod="get" value="on" class="btn btn-default">Lösche alle Nutzer</button>
+			</form>
+		</div>
+		<div class="col-md-6 text-center">
+			<h5>Registration</h5>
+			<form method="post">
+				<input type="text" name="n_nutzer" placeholder="Neuer Nutzer" value="{{n_nutzer}}" class="form-control">
+				<div class="error">{{error_username}}</div>
+				<input type="password" name="n_pw" placeholder="Passwort" class="form-control">
+				<div class="error">{{error_pw}}</div>
+				<input type="submit" value="Anlegen" class="btn btn-default">
+			</form>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<hr>
+			<h4>Design</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<form method="get" name="design_choice">
+				<button type="submit" name="btn-winter" class="btn btn-winter" value="on">Winter</button>
+				<button type="submit" name="btn-fruehling" class="btn btn-fruehling" value="on">Frühling</button>
+				<button type="submit" name="btn-sommer" class="btn btn-sommer" value="on">Sommer</button>
+				<button type="submit" name="btn-herbst" class="btn btn-herbst" value="on">Herbst</button>
+				<button type="submit" name="btn-autodesign" class="btn btn-default" value="on">Auto</button>
+			</form>
+		</div>
+	</div>
+{% endblock %}

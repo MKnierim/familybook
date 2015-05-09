@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{% block header_title %}Willkommen zum kniebook{% endblock %}</title>
+	
+	<link rel="stylesheet" href="static/bootstrap.min.css">
+	<link rel="stylesheet" href="static/main.css">
+	<link rel="stylesheet" href="static/{{season}}"> <!-- An dieser Stelle koennen saisonale Designs eingebunden werden -->
+	<link href='http://fonts.googleapis.com/css?family=Raleway:100,300,400,900' rel='stylesheet'>
+
+</head>
+<body>
+	<div class="container">
+		<header>
+			{% block header_content %}
+			<div class="row">
+				<div class="col-md-12 text-center">
+					<h1>kniebook</h1>
+				</div>
+			</div>
+			{% endblock %}
+		</header>
+		<nav>
+			{% block nav_content %}
+				<hr>
+				<div class="row">
+					<div class="col-md-12 text-center">
+						<a href="/" class="btn btn-default">Start</a>
+						<a href="/main" class="btn btn-default">Aktuelles</a>
+						{% if nutzer == "Admin" %}		
+							<a href="/back" class="btn btn-default">Back-end</a>
+						{% else %}
+							<a href="/settings" class="btn btn-default">Einstellungen</a>
+						{% endif %}
+					</div>
+				</div>
+			{% endblock %}
+		</nav>
+		<main>
+			{% block main_content %}
+			{% endblock %}
+		</main>
+		<footer>
+			{% block footer_content %}
+				<div class="row">
+					<div class="col-md-12 text-center">
+						<p>© Michael Knierim - 2015</p>
+					</div>
+				</div>
+			{% endblock %}
+		</footer>
+	</div>
+</body>
+</html>

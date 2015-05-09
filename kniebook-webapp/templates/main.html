@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block header_content %}
+	<div class="row">
+		<div class="col-md-10 text-right">
+			<h5>Willkommen zum kniebook</h5>
+			<h5>{{nutzer}}</h5>
+		</div>
+		<div class="col-md-2">
+			<img src="images/avatare/{{avatar}}" class="img-responsive img-circle avatar-small">
+		</div>
+	</div>
+{% endblock %}
+
+{% block main_content %}
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<hr>
+			<h5>Aktuelles</h5>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			Heute ist der {{akt_datum}}
+		</div>
+	</div>
+{% endblock %}

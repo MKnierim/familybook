@@ -1,0 +1,169 @@
+/* ------------------------------------ */
+/* Allgemeine Elemente */
+/* ------------------------------------ */
+* {
+	/*-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	box-sizing: border-box;*/
+
+	/*border: 1px solid red !important;*/
+
+	font-family: 'Raleway', sans-serif;
+}
+
+h1,h2,h3,h4,h5,h6 {
+	color: #000;
+	margin: 0px;
+}
+
+h1 {
+	font-size: 4em;
+	font-weight: 900;
+}
+
+h5 {
+	font-size: 1.2em;
+	font-weight: 300;
+}
+
+header {
+	margin-top: 60px;
+	margin-bottom: 60px;
+}
+
+nav	{
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+/* ------------------------------------ */
+/* Bootstrap Elemente */
+/* ------------------------------------ */
+.container {
+	max-width: 720px;
+	background-color: #fff;
+	margin-top: 60px;
+	margin-bottom: 60px;
+}
+
+@media screen and (max-height: 800px) {
+	.container {
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+}
+
+.row {
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+.form-control {
+	width: 200px;
+	margin: 0 auto;
+}
+
+.btn {
+	margin-top: 3px;
+	margin-bottom: 3px;
+}
+
+/* ------------------------------------ */
+/* Eigene Elemente */
+/* ------------------------------------ */
+.avatar-small {
+	width: 40px;
+}
+
+.single-row-form-element {
+	width: 100%;
+}
+
+.img-test {
+	width: 150px;
+	height: 150px;
+}
+
+#img-bk {
+	display: block;
+  	margin-right: 10px;
+  	margin-left: auto;
+}
+
+#img-tk {
+	display: block;
+  	margin-right: auto;
+  	margin-left: 10px;
+}
+
+#img-dk {
+	display: block;
+  	margin-right: 0px;
+  	margin-left: auto;
+}
+
+#img-mk1 {
+	display: block;
+  	margin-right: auto;
+  	margin-left: auto;
+}
+
+#img-mk2 {
+	display: block;
+  	margin-right: auto;
+  	margin-left: 0px;
+}
+
+@media screen and (max-width: 991px) {
+	#img-bk {
+		display: block;
+	  	margin-right: auto;
+	  	margin-left: auto;
+	}
+
+	#img-tk {
+		display: block;
+	  	margin-right: auto;
+	  	margin-left: auto;
+	}
+
+	#img-dk {
+		display: block;
+	  	margin-right: auto;
+	  	margin-left: auto;
+	}
+
+	#img-mk1 {
+		display: block;
+	  	margin-right: auto;
+	  	margin-left: auto;
+	}
+
+	#img-mk2 {
+		display: block;
+	  	margin-right: auto;
+	  	margin-left: auto;
+	}
+}
+
+
+.btn-winter {
+  color: #fff;
+  background-color: #294273;
+}
+
+.btn-fruehling {
+  color: #fff;
+  background-color: #2DA690;
+}
+
+.btn-sommer {
+  color: #fff;
+  background-color: #F29441;
+}
+
+.btn-herbst {
+  color: #fff;
+  background-color: #D94B2B;
+}
