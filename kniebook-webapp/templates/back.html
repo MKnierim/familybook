@@ -27,7 +27,7 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th>Nr.</th>
+							<th>ID</th>
 							<th>Nutzername</th>
 							<th>Passwort</th>
 							<th>Geburtsdatum</th>
@@ -37,11 +37,11 @@
 					<tbody>
 					{% for entry in users %}
 						<tr>
-							<td>{{users.index(entry)+1}}</td>
-							<td>{{entry[0]}}</td>
-							<td>{{entry[1]}}</td>
-							<td>{{entry[2]}}</td>
-							<td><img src="images/avatare/{{entry[3]}}" class="img-responsive img-circle avatar-small"></td>
+							<td>{{entry.key().id()}}</td>
+							<td>{{entry.username}}</td>
+							<td>{{entry.password}}</td>
+							<td>{{entry.geburtsdatum}}</td>
+							<td><img src="images/avatare/{{entry.avatar}}" class="img-responsive img-circle avatar-small"></td>
 						</tr>
 					{% endfor %}
 					</tbody>
@@ -76,24 +76,6 @@
 				<input type="password" name="n_pw" placeholder="Passwort" class="form-control">
 				<div class="error">{{error_pw}}</div>
 				<input type="submit" value="Anlegen" class="btn btn-default">
-			</form>
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="col-md-12 text-center">
-			<hr>
-			<h4>Design</h4>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-md-12 text-center">
-			<form method="get" name="design_choice">
-				<button type="submit" name="btn-winter" class="btn btn-winter" value="on">Winter</button>
-				<button type="submit" name="btn-fruehling" class="btn btn-fruehling" value="on">Frühling</button>
-				<button type="submit" name="btn-sommer" class="btn btn-sommer" value="on">Sommer</button>
-				<button type="submit" name="btn-herbst" class="btn btn-herbst" value="on">Herbst</button>
-				<button type="submit" name="btn-autodesign" class="btn btn-default" value="on">Auto</button>
 			</form>
 		</div>
 	</div>

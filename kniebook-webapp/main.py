@@ -44,8 +44,9 @@ class BlogHandler(webapp2.RequestHandler):
 		return t.render(kw)
 
 	def render(self, template, **kw):
-		season=seasons.check_season()
-		self.write(self.render_str(template, season=season, **kw))
+		# kw["nutzer"] = nutzer
+		kw["season"] = seasons.check_season()
+		self.write(self.render_str(template, **kw))
 
 	def set_secure_cookie(self, name, val):
 		cookie_val = security.make_hash(val)
@@ -62,6 +63,11 @@ class BlogHandler(webapp2.RequestHandler):
 
 	# def logout(self):
 	# 	self.response.headers.add_header('Set-Cookie', 'user_id=; Path=/')
+
+	# def initialize(self, *a, **kw):
+ #        webapp2.RequestHandler.initialize(self, *a, **kw)
+ #        uid = self.read_secure_cookie('user_id')
+ #        self.user = uid and User.by_id(int(uid))
 
 class FrontHandler(BlogHandler):
 	def get(self):

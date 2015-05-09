@@ -10,8 +10,20 @@
 
 {% block main_content %}
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-12 text-center">
 			<hr>
+			<h4>Design</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<form method="get" name="design_choice">
+				<button type="submit" name="btn-winter" class="btn btn-winter" value="on">Winter</button>
+				<button type="submit" name="btn-fruehling" class="btn btn-fruehling" value="on">Frühling</button>
+				<button type="submit" name="btn-sommer" class="btn btn-sommer" value="on">Sommer</button>
+				<button type="submit" name="btn-herbst" class="btn btn-herbst" value="on">Herbst</button>
+				<button type="submit" name="btn-autodesign" class="btn btn-default" value="on">Auto</button>
+			</form>
 		</div>
 	</div>
 {% endblock %}

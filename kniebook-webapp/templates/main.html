@@ -7,7 +7,9 @@
 			<h5>{{nutzer}}</h5>
 		</div>
 		<div class="col-md-2">
+			{% if nutzer %}
 			<img src="images/avatare/{{avatar}}" class="img-responsive img-circle avatar-small">
+			{% endif %}
 		</div>
 	</div>
 {% endblock %}

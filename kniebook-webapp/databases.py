@@ -19,9 +19,9 @@ class User(db.Model):
 	email = db.StringProperty()
 	avatar = db.StringProperty()
 
-	# @classmethod
-	# def by_id(cls, uid):
-	# 	return User.get_by_id(uid)
+	@classmethod
+	def by_id(cls, nutzer_id):
+		return User.get_by_id(nutzer_id)
 
 	@classmethod
 	def by_name(cls, user):
@@ -64,11 +64,7 @@ def create_admin():
 	new_admin.put()
 
 def list_all_users():
-	return [[str(entry.username), 
-			str(entry.password),
-			entry.geburtsdatum.strftime("%d.%m.%Y"),
-			str(entry.avatar)]
-			for entry in User.all().order("geburtsdatum")]
+	return User.all().order("geburtsdatum").fetch(limit=None)
 
 def delete_all_users():
 	for entry in User.all():
