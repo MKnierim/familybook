@@ -19,7 +19,7 @@ def validate_hash(secure_val):
 def make_pw_hash(pw, salt = None):
 	if not salt:
 		salt = make_salt()
-	return "%s, %s" % (salt, hmac.new(PW_SECRET,pw).hexdigest())
+	return "%s|%s" % (salt, hmac.new(PW_SECRET,pw).hexdigest())
 
 def validate_pw(pw, hash_pw):
 	salt = hash_pw.split("|")[0]

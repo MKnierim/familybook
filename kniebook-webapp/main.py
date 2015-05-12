@@ -35,7 +35,16 @@ template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 # Creates a jinja2 environment based on the template folder
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape = True)
 
-class BlogHandler(webapp2.RequestHandler):
+class AppHandler(webapp2.RequestHandler):
+	# initialize wird angeblich vor jedem request in Google App Engine durchgefuehrt.
+	# Ist hier vermutl. eine Anpassung dieser Funktion so dass Cookies durchsucht werden.
+	# Bedeutet einfach, dass immer der Nutzer eingeloggt bleibt, egal welche Seite er aufruft
+	def initialize(self, *a, **kw):
+		webapp2.RequestHandler.initialize(self, *a, **kw)
+		uid = self.read_secure_cookie('user_id')
+		self.nutzer = uid and databases.User.by_id(int(uid)) #Vorsicht mit der logischen Reinehfolge. Wenn beide True dann wird das letzte zurueck gegeben. Wenn eins false, dann wird das erste zurueck gegeben.
+
+	# Diese Funktion ist v.a. zum debuggen da. Sonst keine Funktion im Script.
 	def write(self, *a, **kw):
 		self.response.write(*a, **kw)
 
@@ -44,9 +53,18 @@ class BlogHandler(webapp2.RequestHandler):
 		return t.render(kw)
 
 	def render(self, template, **kw):
-		# kw["nutzer"] = nutzer
+		if self.nutzer:
+			kw["nutzer"] = self.nutzer.username
+			kw["avatar"] = self.nutzer.avatar
+
 		kw["season"] = seasons.check_season()
-		self.write(self.render_str(template, **kw))
+		kw["akt_datum"] = date.today().strftime("%d.%m.%Y")
+
+		#Ueberpruefung ob die Seite gerendert werden soll wenn Nutzer nicht angemeldet ist
+		if not self.nutzer and template != "front.html" and template != "back.html": #Letzterer Teil sollte spaeter entfernt werden um das Back-End zu schuetzen
+			self.write(self.render_str("error.html", **kw))
+		else:
+			self.write(self.render_str(template, **kw))	
 
 	def set_secure_cookie(self, name, val):
 		cookie_val = security.make_hash(val)
@@ -56,41 +74,31 @@ class BlogHandler(webapp2.RequestHandler):
 
 	def read_secure_cookie(self, name):
 		cookie_val = self.request.cookies.get(name)
-		return cookie_val and check_secure_val(cookie_val)
+		return cookie_val and security.validate_hash(cookie_val)
 
-	# def login(self, user):
-	# 	self.set_secure_cookie("nutzer", str(databases.user.key().id()))
+	def login_cookie(self, user):
+		self.set_secure_cookie("user_id", str(user.key().id()))
 
-	# def logout(self):
-	# 	self.response.headers.add_header('Set-Cookie', 'user_id=; Path=/')
+	def logout_cookie(self):
+		self.response.headers.add_header('Set-Cookie', 'user_id=; Path=/')
 
-	# def initialize(self, *a, **kw):
- #        webapp2.RequestHandler.initialize(self, *a, **kw)
- #        uid = self.read_secure_cookie('user_id')
- #        self.user = uid and User.by_id(int(uid))
-
-class FrontHandler(BlogHandler):
+class FrontHandler(AppHandler):
 	def get(self):
 		self.render("front.html")
 
 	def post(self):
 		nutzer = self.request.get("nutzer")
-		val_nutzer = databases.User.by_name(nutzer)
+		pw = self.request.get("passwort")
 
-		params = dict(nutzer=nutzer,
-						avatar=val_nutzer.avatar,
-						akt_datum=date.today().strftime("%d.%m.%Y"))
-
-		if val_nutzer:
-			if val_nutzer == "Admin":
-				self.render("main.html", **params)
-			else:
-				self.render("main.html", **params)
+		valid_user = databases.User.login_check(nutzer,pw)
+		if valid_user:
+			self.login_cookie(valid_user)
+			self.redirect("/main")
 		else:
-			fehler = "Der angegebene Benutzer existiert nicht."
+			fehler = "Die Login-Angaben waren leider falsch."
 			self.render("front.html", fehler=fehler)
 
-class BackHandler(BlogHandler):
+class BackHandler(AppHandler):
 	def get(self):
 		initialize_users = self.request.get("btn-initialize-users")
 		if initialize_users:
@@ -137,21 +145,34 @@ class BackHandler(BlogHandler):
 			databases.User.register(new_user, new_pw)
 			time.sleep(.1)
 			self.redirect("/back")
-			
-			# self.login(u)
-			# self.redirect('/blog')
 
-class MainHandler(BlogHandler):
+class MainHandler(AppHandler):
 	def get(self):
-		self.render("main.html", akt_datum=date.today().strftime("%d.%m.%Y"))
+		self.render("main.html")
 
-class SettingsHandler(BlogHandler):
+class SettingsHandler(AppHandler):
 	def get(self):
 		self.render("settings.html")
+
+class TermineHandler(AppHandler):
+	def get(self):
+		self.render("termine.html")
+
+class BlogHandler(AppHandler):
+	def get(self):
+		self.render("blog.html")
+
+class LogoutHandler(AppHandler):
+	def get(self):
+		self.logout_cookie()
+		self.redirect("/")
 
 app = webapp2.WSGIApplication([
 	("/", FrontHandler),
 	("/back", BackHandler),
 	("/main", MainHandler),
-	("/settings", SettingsHandler)
+	("/settings", SettingsHandler),
+	("/termine", TermineHandler),
+	("/blog", BlogHandler),
+	("/logout", LogoutHandler)
 ], debug=True)

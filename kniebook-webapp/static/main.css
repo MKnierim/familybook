@@ -37,6 +37,11 @@ nav	{
 	margin-bottom: 15px;
 }
 
+a:active,
+a:hover {
+	text-decoration: none;
+}
+
 /* ------------------------------------ */
 /* Bootstrap Elemente */
 /* ------------------------------------ */
@@ -80,42 +85,14 @@ nav	{
 	width: 100%;
 }
 
-.img-test {
-	width: 150px;
-	height: 150px;
+.front-img {
+	width: 100px;
+	max-width: 100%;
+	height: auto;
+	margin: 0 auto;
 }
 
-#img-bk {
-	display: block;
-  	margin-right: 10px;
-  	margin-left: auto;
-}
-
-#img-tk {
-	display: block;
-  	margin-right: auto;
-  	margin-left: 10px;
-}
-
-#img-dk {
-	display: block;
-  	margin-right: 0px;
-  	margin-left: auto;
-}
-
-#img-mk1 {
-	display: block;
-  	margin-right: auto;
-  	margin-left: auto;
-}
-
-#img-mk2 {
-	display: block;
-  	margin-right: auto;
-  	margin-left: 0px;
-}
-
-@media screen and (max-width: 991px) {
+/*@media screen and (max-width: 991px) {
 	#img-bk {
 		display: block;
 	  	margin-right: auto;
@@ -146,7 +123,7 @@ nav	{
 	  	margin-left: auto;
 	}
 }
-
+*/
 
 .btn-winter {
   color: #fff;

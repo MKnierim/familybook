@@ -1,3 +1,3 @@
-from datetime import date
+x = "Hans"
 
-print(date(1958,5,13))
+print(True or x)

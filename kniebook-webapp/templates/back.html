@@ -5,7 +5,7 @@
 {% block header_content %}
 	<div class="row">
 		<div class="col-md-12 text-center">
-			<h1>kniebook</h1>
+			<h1><a href="/">kniebook</a></h1>
 			<h3>Back-end</h3>
 		</div>
 	</div>
@@ -27,7 +27,7 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th>ID</th>
+							<th>Nr.</th>
 							<th>Nutzername</th>
 							<th>Passwort</th>
 							<th>Geburtsdatum</th>
@@ -37,10 +37,10 @@
 					<tbody>
 					{% for entry in users %}
 						<tr>
-							<td>{{entry.key().id()}}</td>
+							<td>{{users.index(entry) + 1}}</td>
 							<td>{{entry.username}}</td>
 							<td>{{entry.password}}</td>
-							<td>{{entry.geburtsdatum}}</td>
+							<td>{{entry.geburtsdatum.strftime("%d.%m.%Y")}}</td>
 							<td><img src="images/avatare/{{entry.avatar}}" class="img-responsive img-circle avatar-small"></td>
 						</tr>
 					{% endfor %}
@@ -62,7 +62,7 @@
 		<div class="col-md-6 text-center">
 			<h5>Algorithmen</h5>
 			<form>
-				<button type="submit" name="btn-initialize-users" formmethod="get" value="on" class="btn btn-default">Initialisiere 5 Knierims + Admin</button>
+				<button type="submit" name="btn-initialize-users" formmethod="get" value="on" class="btn btn-default">Initialisiere Nutzer</button>
 			</form>
 			<form>
 				<button type="submit" name="btn-delete-all-users" formmethod="get" value="on" class="btn btn-default">Lösche alle Nutzer</button>

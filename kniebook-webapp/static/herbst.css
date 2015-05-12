@@ -2,6 +2,14 @@ body {
 	background-color: #D94B2B;
 }
 
+a {
+	color: #732817;
+}
+a:active,
+a:hover {
+	color: #D94B2B;
+}
+
 .error {
 	color: #F29441;
 }
