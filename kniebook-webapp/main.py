@@ -61,7 +61,7 @@ class AppHandler(webapp2.RequestHandler):
 		kw["akt_datum"] = date.today().strftime("%d.%m.%Y")
 
 		#Ueberpruefung ob die Seite gerendert werden soll wenn Nutzer nicht angemeldet ist
-		if not self.nutzer and template != "front.html" and template != "back.html": #Letzterer Teil sollte spaeter entfernt werden um das Back-End zu schuetzen
+		if not self.nutzer and template != "front.html" and template != "back.html" and template != "trockenmauer.html": #Letzterer Teil sollte spaeter entfernt werden um das Back-End zu schuetzen
 			self.write(self.render_str("error.html", **kw))
 		else:
 			self.write(self.render_str(template, **kw))	
@@ -162,6 +162,10 @@ class BlogHandler(AppHandler):
 	def get(self):
 		self.render("blog.html")
 
+class ProjektHandler(AppHandler):
+	def get(self):
+		self.render("trockenmauer.html")
+
 class LogoutHandler(AppHandler):
 	def get(self):
 		self.logout_cookie()
@@ -174,5 +178,6 @@ app = webapp2.WSGIApplication([
 	("/settings", SettingsHandler),
 	("/termine", TermineHandler),
 	("/blog", BlogHandler),
+	("/trockenmauer", ProjektHandler),
 	("/logout", LogoutHandler)
 ], debug=True)

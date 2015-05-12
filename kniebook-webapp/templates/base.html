@@ -17,7 +17,7 @@
 			{% block header_content %}
 			<div class="row">
 				<div class="col-xs-10 text-right">
-					<h5>Willkommen zum kniebook</h5>
+					<h5>Willkommen zum <a href="/">kniebook</a></h5>
 					<h5>{{nutzer}}</h5>
 				</div>
 				<div class="col-xs-2">
@@ -39,7 +39,7 @@
 						{% if nutzer == "Admin" %}		
 							<a href="/back" class="btn btn-default">Back-end</a>
 						{% else %}
-							<a href="/settings" class="btn btn-default">Einstellungen</a>
+							<!-- <a href="/settings" class="btn btn-default">Einstellungen</a> -->
 						{% endif %}
 						<a href="/logout" class="btn btn-default">Abmelden</a>
 					</div>
