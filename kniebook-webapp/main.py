@@ -102,17 +102,17 @@ class BackHandler(AppHandler):
 	def get(self):
 		initialize_users = self.request.get("btn-initialize-users")
 		if initialize_users:
-			databases.create_initial_users()
+			databases.User.create_initial_users()
 			time.sleep(.2)
 			self.redirect("/back")
 
 		delete_users = self.request.get("btn-delete-all-users")
 		if delete_users:
-			databases.delete_all_users()
+			databases.delete_all_entries(databases.User)
 			time.sleep(.2)
 			self.redirect("/back")
 
-		self.render("back.html", users = databases.list_all_users())
+		self.render("back.html", users = databases.list_all_entries(databases.User,"geburtsdatum"))
 
 	def post(self):
 		error = False
@@ -156,15 +156,15 @@ class SettingsHandler(AppHandler):
 
 class TermineHandler(AppHandler):
 	def get(self):
-		self.render("termine.html")
+		dates = databases.list_all_entries(databases.Calendar,"date")
+		self.render("termine.html", dates=dates)
+
+	def post(self):
+		pass
 
 class BlogHandler(AppHandler):
 	def get(self):
 		self.render("blog.html")
-
-class ProjektHandler(AppHandler):
-	def get(self):
-		self.render("trockenmauer.html")
 
 class LogoutHandler(AppHandler):
 	def get(self):
@@ -178,6 +178,5 @@ app = webapp2.WSGIApplication([
 	("/settings", SettingsHandler),
 	("/termine", TermineHandler),
 	("/blog", BlogHandler),
-	("/trockenmauer", ProjektHandler),
 	("/logout", LogoutHandler)
 ], debug=True)
