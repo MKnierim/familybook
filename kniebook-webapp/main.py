@@ -168,7 +168,8 @@ class SettingsHandler(AppHandler):
 
 class TermineHandler(AppHandler):
 	def get(self):
-		self.render("termine.html", dates=databases.list_entries(databases.Calendar,"date"))
+		params = dict(dates=databases.Calendar.get_dates_ahead())
+		self.render("termine.html", **params)
 
 	def post(self):
 		params = dict(date = datetime.datetime.strptime(self.request.get("date"),"%Y-%m-%d").date(),
@@ -203,6 +204,11 @@ class TermineHandler(AppHandler):
 			time.sleep(.1)
 			self.redirect("/termine")
 
+class TermineArchivHandler(AppHandler):
+	def get(self):
+		params = dict(old_dates=databases.Calendar.get_dates_before())
+		self.render("termine_archiv.html", **params)
+
 class BlogHandler(AppHandler):
 	def get(self):
 		params = dict(posts = databases.list_entries(databases.Post,"-created",5))
@@ -219,6 +225,7 @@ app = webapp2.WSGIApplication([
 	("/main", MainHandler),
 	("/settings", SettingsHandler),
 	("/termine", TermineHandler),
+	("/terminarchiv", TermineArchivHandler),
 	("/blog", BlogHandler),
 	("/logout", LogoutHandler)
 ], debug=True)

@@ -30,18 +30,22 @@
 		</header>
 		<nav>
 			{% block nav_content %}
-				<hr>
+				<div class="row">
+					<div class="col-md-12">
+						<hr>
+					</div>
+				</div>
 				<div class="row">
 					<div class="col-md-12 text-center">
-						<a href="/main" class="btn btn-default">Aktuelles</a>
-						<a href="/termine" class="btn btn-default">Termine</a>
-						<a href="/blog" class="btn btn-default">Blog</a>
+						<a href="/main" class="btn btn-season">Aktuelles</a>
+						<a href="/termine" class="btn btn-season">Termine</a>
+						<a href="/blog" class="btn btn-season">Blog</a>
 						{% if nutzer == "Admin" %}		
-							<a href="/back" class="btn btn-default">Back-end</a>
+							<a href="/back" class="btn btn-season">Back-end</a>
 						{% else %}
-							<!-- <a href="/settings" class="btn btn-default">Einstellungen</a> -->
+							<!-- <a href="/settings" class="btn btn-season">Einstellungen</a> -->
 						{% endif %}
-						<a href="/logout" class="btn btn-default">Abmelden</a>
+						<a href="/logout" class="btn btn-season">Abmelden</a>
 					</div>
 				</div>
 			{% endblock %}
@@ -51,13 +55,17 @@
 			{% endblock %}
 		</main>
 		<footer>
-			<hr>
-			{% block footer_content %}
-				<div class="row">
-					<div class="col-md-12 text-center">
-						<small>© Michael Knierim - 2015</small>
-					</div>
+			<div class="row">
+				<div class="col-md-12">
+					<hr>
 				</div>
+			</div>
+			{% block footer_content %}
+			<div class="row">
+				<div class="col-md-12 text-center">
+					<small>© Michael Knierim - 2015</small>
+				</div>
+			</div>
 			{% endblock %}
 		</footer>
 	</div>

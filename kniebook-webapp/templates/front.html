@@ -31,20 +31,16 @@
 
 	{% if nutzer %}
 	<div class="row">
-		<div class="col-md-12">
-			<div class="row">
-				<div class="col-md-12 text-center">
-					<a href="/main" class="btn btn-default">Aktuelles</a>
-					<a href="/termine" class="btn btn-default">Termine</a>
-					<a href="/blog" class="btn btn-default">Blog</a>
-					{% if nutzer == "Admin" %}		
-						<a href="/back" class="btn btn-default">Back-end</a>
-					{% else %}
-						<!-- <a href="/settings" class="btn btn-default">Einstellungen</a> -->
-					{% endif %}
-					<a href="/logout" class="btn btn-default">Abmelden</a>
-				</div>
-			</div>
+		<div class="col-md-12 text-center">
+			<a href="/main" class="btn btn-season">Aktuelles</a>
+			<a href="/termine" class="btn btn-season">Termine</a>
+			<a href="/blog" class="btn btn-season">Blog</a>
+			{% if nutzer == "Admin" %}		
+				<a href="/back" class="btn btn-season">Back-end</a>
+			{% else %}
+				<!-- <a href="/settings" class="btn btn-season">Einstellungen</a> -->
+			{% endif %}
+			<a href="/logout" class="btn btn-season">Abmelden</a>
 		</div>
 	</div>
 	{% else %}
@@ -75,15 +71,15 @@
 {% block footer_content %}
 	<div class="row">
 		<div class="col-md-12 text-center">
-			<h5>Über</h5>
+			<h4>Über das kniebook</h4>
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-1"></div>
-		<div class="col-md-10 text-center">
+		<div class="col-xs-1"></div>
+		<div class="col-xs-10 text-center">
 			<p>Das kniebook ist eine Ahnlehnung an das allseits bekannte gesichtsbook (oder: facebook), das allerdings nur den Mitgliedern des Knie-fokalen Clans der Knierims gewidmet ist. Es handelt sich also um eine privatisierte Variante des sozialen Netzwerks, das wir alle lieben oder fürchten gelernt haben und um den Versuch, die Furcht und die Öffentlichkeit aus der Verteilung unserer Katzen- und Kinderfotos auszuschließen.</p>
 			<p>Bei Beschwerden gilt es ausschließlich sich an den <a href="mailto:michael@kniebook.de">Administrator</a> zu melden. Allerdings besteht die Gefahr, dass diese Botschaften im Clan-internen Beschwerdebriefkasten alt werden. Sollte dies der Fall sein, dann wird um Hartnäckigkeit gebeten.</p>
 		</div>
-		<div class="col-md-1"></div>
+		<div class="col-xs-1"></div>
 	</div>
 {% endblock %}

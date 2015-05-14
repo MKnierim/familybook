@@ -37,6 +37,11 @@ nav	{
 	margin-bottom: 15px;
 }
 
+hr {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
 a:active,
 a:hover {
 	text-decoration: none;
@@ -91,36 +96,3 @@ a:hover {
 	height: auto;
 	margin: 0 auto;
 }
-
-/*@media screen and (max-width: 991px) {
-	#img-bk {
-		display: block;
-	  	margin-right: auto;
-	  	margin-left: auto;
-	}
-
-	#img-tk {
-		display: block;
-	  	margin-right: auto;
-	  	margin-left: auto;
-	}
-
-	#img-dk {
-		display: block;
-	  	margin-right: auto;
-	  	margin-left: auto;
-	}
-
-	#img-mk1 {
-		display: block;
-	  	margin-right: auto;
-	  	margin-left: auto;
-	}
-
-	#img-mk2 {
-		display: block;
-	  	margin-right: auto;
-	  	margin-left: auto;
-	}
-}
-*/

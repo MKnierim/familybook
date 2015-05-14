@@ -2,9 +2,13 @@
 
 {% block main_content %}
 	<div class="row">
-		<div class="col-md-12 text-center">
+		<div class="col-md-12">
 			<hr>
-			<h4>Alle Termine</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h4>Alle ausstehenden Termine</h4>
 		</div>
 	</div>
 	<div class="row">
@@ -16,8 +20,10 @@
 						<dd>{{entry.date.strftime("%d.%m.%Y")}}</dd>
 						<dt>Titel:</dt>
 						<dd>{{entry.title}}</dd>
-						<dt>Autor:</dt>
-						<dd>{{entry.author.username}}</dd>
+						{% if entry.description %}
+						<dt>Beschreibung:</dt>
+						<dd>{{entry.description}}</dd>
+						{% endif %}
 					</dl>
 				{% endfor %}
 			{% else %}
@@ -27,7 +33,16 @@
 	</div>
 	<div class="row">
 		<div class="col-md-12 text-center">
+			<a href="/terminarchiv" class="btn btn-default">Vergangene Termine</a>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
 			<hr>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
 			<h4>Einen Termin eintragen</h4>
 			<small>Felder mit Asterisk (*) müssen ausgefüllt werden.</small>
 		</div>

@@ -130,6 +130,14 @@ class Calendar(db.Model):
 		next_week = today + datetime.timedelta(days=7)
 		return cls.all().filter("date >=", today).filter("date <=", next_week).order("date").fetch(limit=None)
 
+	@classmethod
+	def get_dates_ahead(cls, limit=None):
+		return cls.all().filter("date >=", datetime.date.today()).order("date").fetch(limit)
+
+	@classmethod
+	def get_dates_before(cls, limit=None):
+		return cls.all().filter("date <", datetime.date.today()).order("-date").fetch(limit)
+
 class Post(db.Model):
 	title = db.StringProperty(required=True)
 	content = db.TextProperty(required=True)

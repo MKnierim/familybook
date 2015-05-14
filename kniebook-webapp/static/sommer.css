@@ -13,3 +13,16 @@ a:hover {
 .error {
 	color: #D94B2B;
 }
+
+.btn-season {
+	color: #fff;
+	background-color: #A6652D;
+	border-color: #ccc;
+}
+
+.btn:hover,
+.btn:focus,
+.btn.focus {
+	color: #F29441;
+	text-decoration: none;
+}
