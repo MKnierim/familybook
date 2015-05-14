@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<hr>
+			<h4>Alle Termine</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			{% if dates %}
+				{% for entry in dates %}
+					<dl class="dl-horizontal">
+						<dt>Datum:</dt>
+						<dd>{{entry.date.strftime("%d.%m.%Y")}}</dd>
+						<dt>Titel:</dt>
+						<dd>{{entry.title}}</dd>
+						<dt>Autor:</dt>
+						<dd>{{entry.author.username}}</dd>
+					</dl>
+				{% endfor %}
+			{% else %}
+				<div class="text-center"><small>Es wurden leider noch keine Termine eingetragen.</small></div>
+			{% endif %}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<hr>
+			<h4>Einen Termin eintragen</h4>
+			<small>Felder mit Asterisk (*) müssen ausgefüllt werden.</small>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<form method="post">
+				<div class="form-group">
+					<label>Datum*</label>
+					<input type="date" name="date" value="{{date}}" class="form-control text-right">
+					<div class="error">{{error_date}}</div>
+				</div>
+				<!-- <div class="form-group">
+					<label>Beginn</label>
+					<input type="time" name="start_time" value="{{start_time}}" class="form-control">
+				</div>
+				<div class="form-group">
+					<label>Ende</label>
+					<input type="time" name="end_time" value="{{end_time}}" class="form-control">
+				</div> -->
+				<div class="form-group">
+					<label>Titel*</label>
+					<input type="text" name="title" value="{{title}}" class="form-control">
+					<div class="error">{{error_title}}</div>
+				</div>
+				<div class="form-group">
+					<label>Beschreibung</label>
+					<textarea name="description" value="{{description}}" class="form-control" rows="6"></textarea>
+				</div>
+				<input type="submit" value="Eintragen" class="btn btn-default">
+			</form>
+		</div>
+	</div>
+	
+{% endblock %}

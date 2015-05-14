@@ -1,7 +1,6 @@
 from google.appengine.ext import db
 
-from datetime import date
-from datetime import time
+import datetime
 import re
 
 import security
@@ -13,18 +12,18 @@ USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
 PASS_RE = re.compile(r"^.{3,20}$")
 # EMAIL_RE  = re.compile(r'^[\S]+@[\S]+\.[\S]+$')
 
-def list_all_entries(cls, order_val=None):
-	return cls.all().order(order_val).fetch(limit=None)
+def list_entries(database, order_val=None, limit=None):
+	return database.all().order(order_val).fetch(limit=None)
 
-def delete_all_entries(cls):
-	for entry in cls.all():
+def delete_all_entries(database):
+	for entry in database.all():
 		entry.delete()
 
 def valid_username(user):
-    return user and USER_RE.match(user)
+	return user and USER_RE.match(user)
 
 def valid_password(password):
-    return password and PASS_RE.match(password)
+	return password and PASS_RE.match(password)
 
 # def valid_email(email):
 #     return not email or EMAIL_RE.match(email)
@@ -49,11 +48,11 @@ class User(db.Model):
 
 	@classmethod
 	def register(cls, user, pw):
-		new_user = User(username = user,
+		new_user = cls(username = user,
 					password = security.make_pw_hash(user, pw),
-					geburtsdatum = date.today(),
+					geburtsdatum = datetime.date.today(),
 					email = "",
-					avatar = "user-reg.jpg")
+					avatar = "guest-reg.jpg")
 
 		new_user.put()
 
@@ -71,11 +70,11 @@ class User(db.Model):
 
 	@classmethod
 	def create_knierims(cls):
-		knierims = [["Beate", date(1958,5,13), "beate@kniebook.de", "bk-reg.jpg", "#F2E14C"],
-					["Thomas", date(1960,11,19), "thomas@kniebook.de", "tk-reg.jpg", "#D94B2B"],
-					["David", date(1986,6,18), "david@kniebook.de", "dk-reg.jpg", "#F29441"],
-					["Michael", date(1988,4,10), "michael@kniebook.de", "mk1-reg.jpg", "#2DA690"],
-					["Matthias", date(1991,1,19), "matthias@kniebook.de", "mk2-reg.jpg", "#294273"]]
+		knierims = [["Beate", datetime.date(1958,5,13), "beate@kniebook.de", "bk-reg.jpg", "#F2E14C"],
+					["Thomas", datetime.date(1960,11,19), "thomas@kniebook.de", "tk-reg.jpg", "#D94B2B"],
+					["David", datetime.date(1986,6,18), "david@kniebook.de", "dk-reg.jpg", "#F29441"],
+					["Michael", datetime.date(1988,4,10), "michael@kniebook.de", "mk1-reg.jpg", "#2DA690"],
+					["Matthias", datetime.date(1991,1,19), "matthias@kniebook.de", "mk2-reg.jpg", "#294273"]]
 
 		for entry in knierims:
 			random_pw = security.make_salt(1)
@@ -93,7 +92,7 @@ class User(db.Model):
 		new_admin = cls(username = "Admin", 
 						password = "admin",
 						password_hash = security.make_pw_hash("admin"),
-						geburtsdatum=date.today(),
+						geburtsdatum=datetime.date.today(),
 						avatar="admin-reg.jpg")
 		new_admin.put()
 
@@ -102,14 +101,45 @@ class User(db.Model):
 		new_guest = cls(username = "Gast", 
 						password = "gast",
 						password_hash = security.make_pw_hash("gast"),
-						geburtsdatum=date.today(),
+						geburtsdatum=datetime.date.today(),
 						avatar="guest-reg.jpg")
 		new_guest.put()
 
 class Calendar(db.Model):
 	date = db.DateProperty(required=True)
-	start_time = db.TimeProperty(default=time(0,0))
-	end_time = db.TimeProperty(default=time(0,0))
+	start_time = db.TimeProperty() #default=time(0,0))
+	end_time = db.TimeProperty() #default=time(0,0))
 	title = db.StringProperty(required=True)
 	description = db.TextProperty()
-	#author = db.ReferenceProperty()
+	author = db.ReferenceProperty() #, required=True)
+
+	@classmethod
+	def input_date(cls, **kw):
+		new_date = cls(date = kw["date"],
+						# start_time = kw["start_time"],
+						# end_time = kw["end_time"],
+						title = kw["title"],
+						description = kw["description"],
+						author = kw["author"])
+
+		new_date.put()
+
+	@classmethod
+	def get_current_week(cls):
+		today = datetime.date.today()
+		next_week = today + datetime.timedelta(days=7)
+		return cls.all().filter("date >=", today).filter("date <=", next_week).order("date").fetch(limit=None)
+
+class Post(db.Model):
+	title = db.StringProperty(required=True)
+	content = db.TextProperty(required=True)
+	author = db.ReferenceProperty()
+	created = db.DateTimeProperty(auto_now_add=True)
+	last_modified = db.DateTimeProperty(auto_now=True)
+
+	# Hier bin ich mir nicht ganz sicher, ob das wirklich notwendig ist
+	@classmethod
+	def render(self):
+		self._render_text = self.content.replace('\n', '<br>')
+		return render_str("post.html", p = self)
+

@@ -24,28 +24,30 @@
 		<div class="col-md-8">
 			<h5 class="text-center">Angelegte Nutzer</h5>
 			{% if users %}
-				<table class="table">
-					<thead>
-						<tr>
-							<th>Nr.</th>
-							<th>Nutzername</th>
-							<th>Passwort</th>
-							<th>Geburtsdatum</th>
-							<th>Avatar</th>
-						</tr>
-					</thead>
-					<tbody>
-					{% for entry in users %}
-						<tr>
-							<td>{{users.index(entry) + 1}}</td>
-							<td>{{entry.username}}</td>
-							<td>{{entry.password}}</td>
-							<td>{{entry.geburtsdatum.strftime("%d.%m.%Y")}}</td>
-							<td><img src="images/avatare/{{entry.avatar}}" class="img-responsive img-circle avatar-small"></td>
-						</tr>
-					{% endfor %}
-					</tbody>
-				</table>
+				<div class="table-responsive">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Nr.</th>
+								<th>Nutzername</th>
+								<th>Passwort</th>
+								<th>Geburtsdatum</th>
+								<th>Avatar</th>
+							</tr>
+						</thead>
+						<tbody>
+						{% for entry in users %}
+							<tr>
+								<td>{{users.index(entry) + 1}}</td>
+								<td>{{entry.username}}</td>
+								<td>{{entry.password}}</td>
+								<td>{{entry.geburtsdatum.strftime("%d.%m.%Y")}}</td>
+								<td><img src="images/avatare/{{entry.avatar}}" class="img-responsive img-circle avatar-small"></td>
+							</tr>
+						{% endfor %}
+						</tbody>
+					</table>
+				</div>
 			{% else %}
 				<p class="text-center">Leider wurden noch keine Nutzer angelegt</p>
 			{% endif %}
@@ -53,6 +55,7 @@
 		<div class="col-md-2">
 		</div>
 	</div>
+
 	<div class="row">
 		<div class="col-md-12 text-center">
 			<h5>Nutzerkontrolle</h5>
@@ -76,6 +79,21 @@
 				<input type="password" name="n_pw" placeholder="Passwort" class="form-control">
 				<div class="error">{{error_pw}}</div>
 				<input type="submit" value="Anlegen" class="btn btn-default">
+			</form>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<hr>
+			<h4>Termine</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h5>Algorithmen</h5>
+			<form>
+				<button type="submit" name="btn-delete-all-dates" formmethod="get" value="on" class="btn btn-default">Lösche alle Termine</button>
 			</form>
 		</div>
 	</div>

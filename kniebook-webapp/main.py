@@ -19,7 +19,7 @@ import jinja2
 import os
 import time
 
-from datetime import date
+import datetime
 
 # Modul in dem saisonale Anpassungen an das Design vorbereitet werden
 import seasons
@@ -58,7 +58,7 @@ class AppHandler(webapp2.RequestHandler):
 			kw["avatar"] = self.nutzer.avatar
 
 		kw["season"] = seasons.check_season()
-		kw["akt_datum"] = date.today().strftime("%d.%m.%Y")
+		kw["akt_datum"] = datetime.date.today().strftime("%d.%m.%Y")
 
 		#Ueberpruefung ob die Seite gerendert werden soll wenn Nutzer nicht angemeldet ist
 		if not self.nutzer and template != "front.html" and template != "back.html" and template != "trockenmauer.html": #Letzterer Teil sollte spaeter entfernt werden um das Back-End zu schuetzen
@@ -66,18 +66,22 @@ class AppHandler(webapp2.RequestHandler):
 		else:
 			self.write(self.render_str(template, **kw))	
 
-	def set_secure_cookie(self, name, val):
+	def set_secure_cookie(self, name, val, expires):
 		cookie_val = security.make_hash(val)
-		self.response.headers.add_header(
-			'Set-Cookie',
-			'%s=%s; Path=/' % (name, cookie_val))
+		cookie = "%s=%s; Expires=%s; Path=/" % (name, cookie_val, expires)
+		self.response.headers.add_header("Set-Cookie", cookie)
 
 	def read_secure_cookie(self, name):
 		cookie_val = self.request.cookies.get(name)
 		return cookie_val and security.validate_hash(cookie_val)
 
-	def login_cookie(self, user):
-		self.set_secure_cookie("user_id", str(user.key().id()))
+	def login_cookie(self, user, remember_check=""):
+		expires_cookie = ""
+		if remember_check:
+			expire_date = datetime.datetime.today() + datetime.timedelta(days=30) #In 30 Tagen
+			expires_cookie = expire_date.strftime("%a, %d-%b-%Y %T") #GMT") #, datetime.time.gmtime(expire_date))
+
+		self.set_secure_cookie("user_id", str(user.key().id()), expires_cookie)
 
 	def logout_cookie(self):
 		self.response.headers.add_header('Set-Cookie', 'user_id=; Path=/')
@@ -89,10 +93,11 @@ class FrontHandler(AppHandler):
 	def post(self):
 		nutzer = self.request.get("nutzer")
 		pw = self.request.get("passwort")
+		remember_check = self.request.get("remember_check")
 
 		valid_user = databases.User.login_check(nutzer,pw)
 		if valid_user:
-			self.login_cookie(valid_user)
+			self.login_cookie(valid_user, remember_check)
 			self.redirect("/main")
 		else:
 			fehler = "Die Login-Angaben waren leider falsch."
@@ -112,7 +117,13 @@ class BackHandler(AppHandler):
 			time.sleep(.2)
 			self.redirect("/back")
 
-		self.render("back.html", users = databases.list_all_entries(databases.User,"geburtsdatum"))
+		delete_dates = self.request.get("btn-delete-all-dates")
+		if delete_dates:
+			databases.delete_all_entries(databases.Calendar)
+			time.sleep(.2)
+			self.redirect("/back")
+
+		self.render("back.html", users = databases.list_entries(databases.User,"geburtsdatum"))
 
 	def post(self):
 		error = False
@@ -148,7 +159,8 @@ class BackHandler(AppHandler):
 
 class MainHandler(AppHandler):
 	def get(self):
-		self.render("main.html")
+		params = dict(current_week=databases.Calendar.get_current_week())
+		self.render("main.html", **params)
 
 class SettingsHandler(AppHandler):
 	def get(self):
@@ -156,15 +168,45 @@ class SettingsHandler(AppHandler):
 
 class TermineHandler(AppHandler):
 	def get(self):
-		dates = databases.list_all_entries(databases.Calendar,"date")
-		self.render("termine.html", dates=dates)
+		self.render("termine.html", dates=databases.list_entries(databases.Calendar,"date"))
 
 	def post(self):
-		pass
+		params = dict(date = datetime.datetime.strptime(self.request.get("date"),"%Y-%m-%d").date(),
+					# start_time = self.request.get("start_time"),
+					# end_time = self.request.get("end_time"),
+					title = self.request.get("title"),
+					description = self.request.get("description"),
+					author = self.nutzer,
+					error_date = "",
+					error_title = "")
+
+		if not params["date"]:
+			params["error_date"] = "Es muss ein Datum festgelegt werden."
+		if not params["title"]:
+			params["error_title"] = "Es muss ein Titel eingegeben werden."
+
+		# if not params["start_time"]:
+		# 	params["start_time"] = None #time(0,0)
+		# else:
+		# 	start_time = params["start_time"]
+		# 	params["start_time"] = datetime.datetime.strptime(start_time,"%H:%M").time()
+		# if not params["end_time"]:
+		# 	params["end_time"] = None #time(0,0)
+		# else:
+		# 	end_time = params["end_time"]
+		# 	params["end_time"] = datetime.datetime.strptime(end_time,"%H:%M").time()
+
+		if params["error_date"] or params["error_title"]:
+			self.render("termine.html", **params)
+		else:
+			databases.Calendar.input_date(**params)
+			time.sleep(.1)
+			self.redirect("/termine")
 
 class BlogHandler(AppHandler):
 	def get(self):
-		self.render("blog.html")
+		params = dict(posts = databases.list_entries(databases.Post,"-created",5))
+		self.render("blog.html", **params)
 
 class LogoutHandler(AppHandler):
 	def get(self):

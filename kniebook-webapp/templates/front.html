@@ -58,8 +58,11 @@
 				<label class="single-row-form-element">
 					<input type="password" name="passwort" placeholder="Passwort" value="{{passwort}}" class="form-control">
 				</label>
-				
-				<!-- <a href="/main" class="btn btn-default">Einloggen</a> -->
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" name="remember_check" value="yes"> <small>Angemeldet bleiben</small>
+					</label>
+				</div>
 				<input type="submit" value="Einloggen" class="btn btn-default">
 			</form>
 			<div class="error">{{fehler}}</div>

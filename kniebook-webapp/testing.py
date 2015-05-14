@@ -1,3 +1,5 @@
-x = "Hans"
+import datetime
 
-print(True or x)
+today = datetime.date.today() + 7
+
+print(today)

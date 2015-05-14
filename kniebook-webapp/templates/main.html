@@ -5,13 +5,24 @@
 		<div class="col-md-12 text-center">
 			<hr>
 			<h4>Aktuelles</h4>
-			Heute ist der {{akt_datum}}
+			<small>Heute ist der {{akt_datum}}</small>
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-12 text-center">
-			<h5>Termine diese Woche</h5>
-			...
+		<div class="col-md-12">
+			<h5 class="text-center">Termine diese Woche</h5>
+			{% if current_week %}
+				{% for entry in current_week %}
+					<dl class="dl-horizontal">
+						<dt>Datum:</dt>
+						<dd>{{entry.date.strftime("%d.%m.%Y")}}</dd>
+						<dt>Titel:</dt>
+						<dd>{{entry.title}}</dd>
+					</dl>
+				{% endfor %}
+			{% else %}
+				<div class="text-center"><small>Diese Woche stehen keine Termine an.</small></div>
+			{% endif %}
 		</div>
 	</div>
 {% endblock %}
