@@ -17,7 +17,20 @@ def list_entries(database, order_val=None, limit=None):
 
 def delete_all_entries(database):
 	for entry in database.all():
-		entry.delete()
+		#Ausnahme fuer das Loeschen von Nutzern, Admin soll erhalten bleiben
+		if not (database==User and entry.username=="Admin"):
+			entry.delete()
+
+def get_new_activities(user, last_visit):
+	activities = []
+	new_dates = Calendar.all().filter("created <=", datetime.date.today()).filter("created >=", last_visit).order("created").fetch(limit=None)
+	# new_posts = Post.all().filter("created <=", datetime.date.today()).filter("created >=", last_visit).filter("author !=", user).order("created").fetch(limit=None)
+
+	for entry in new_dates:
+		if not entry.author == user:
+			activities.append(entry)
+
+	return activities
 
 def valid_username(user):
 	return user and USER_RE.match(user)
@@ -37,6 +50,7 @@ class User(db.Model):
 	avatar = db.StringProperty(default="guest-reg.jpg")
 	cal_color = db.StringProperty()
 	ui_color = db.StringProperty(choices=["winter", "fruehling", "sommer", "herbst", "auto"]) #Vll nicht so sinnvoll oder notwendig...
+	last_visit = db.DateProperty(default=datetime.date(2015,1,1))
 
 	@classmethod
 	def by_id(cls, nutzer_id):
@@ -65,7 +79,7 @@ class User(db.Model):
 	@classmethod
 	def create_initial_users(cls):
 		cls.create_knierims()
-		cls.create_admin()
+		# cls.create_admin() Wurde rausgenommen weil Admin im Notfall automatisch durch Aufruf von front.html angelegt wird.
 		cls.create_guest()
 
 	@classmethod
@@ -73,11 +87,12 @@ class User(db.Model):
 		knierims = [["Beate", datetime.date(1958,5,13), "beate@kniebook.de", "bk-reg.jpg", "#F2E14C"],
 					["Thomas", datetime.date(1960,11,19), "thomas@kniebook.de", "tk-reg.jpg", "#D94B2B"],
 					["David", datetime.date(1986,6,18), "david@kniebook.de", "dk-reg.jpg", "#F29441"],
+					["Franzi", datetime.date(1991,12,15), "franzi@kniebook.de", "franzi-reg.jpg", "#F29441"],
 					["Michael", datetime.date(1988,4,10), "michael@kniebook.de", "mk1-reg.jpg", "#2DA690"],
 					["Matthias", datetime.date(1991,1,19), "matthias@kniebook.de", "mk2-reg.jpg", "#294273"]]
 
 		for entry in knierims:
-			random_pw = security.make_salt(1)
+			random_pw = security.make_salt(12)
 			new_user = cls(username = entry[0], 
 							password = random_pw,
 							password_hash = security.make_pw_hash(random_pw),
@@ -86,6 +101,13 @@ class User(db.Model):
 							avatar= entry[3],
 							cal_color = entry[4])
 			new_user.put()
+
+			#Trage alle Geburtstage in Kalender ein
+			birthday_date = entry[1].replace(year=datetime.date.today().year)
+			new_date = Calendar(date = birthday_date,
+								title = entry[0]+" "+str(datetime.date.today().year-entry[1].year)+". Geburtstag",
+								author = new_user)
+			new_date.put()
 
 	@classmethod
 	def create_admin(cls):
@@ -105,13 +127,21 @@ class User(db.Model):
 						avatar="guest-reg.jpg")
 		new_guest.put()
 
+	@classmethod
+	def check_and_update_visit(cls, user):
+		last_visit = user.last_visit
+		user.last_visit = datetime.date.today()
+		user.put()
+		return last_visit
+
 class Calendar(db.Model):
 	date = db.DateProperty(required=True)
 	start_time = db.TimeProperty() #default=time(0,0))
 	end_time = db.TimeProperty() #default=time(0,0))
 	title = db.StringProperty(required=True)
 	description = db.TextProperty()
-	author = db.ReferenceProperty() #, required=True)
+	author = db.ReferenceProperty()
+	created = db.DateProperty(auto_now_add=True)
 
 	@classmethod
 	def input_date(cls, **kw):
@@ -142,7 +172,7 @@ class Post(db.Model):
 	title = db.StringProperty(required=True)
 	content = db.TextProperty(required=True)
 	author = db.ReferenceProperty()
-	created = db.DateTimeProperty(auto_now_add=True)
+	created = db.DateProperty(auto_now_add=True)
 	last_modified = db.DateTimeProperty(auto_now=True)
 
 	# Hier bin ich mir nicht ganz sicher, ob das wirklich notwendig ist

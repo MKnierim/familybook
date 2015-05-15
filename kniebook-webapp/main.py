@@ -54,14 +54,14 @@ class AppHandler(webapp2.RequestHandler):
 
 	def render(self, template, **kw):
 		if self.nutzer:
-			kw["nutzer"] = self.nutzer.username
-			kw["avatar"] = self.nutzer.avatar
+			kw["nutzer"] = self.nutzer
 
 		kw["season"] = seasons.check_season()
 		kw["akt_datum"] = datetime.date.today().strftime("%d.%m.%Y")
+		kw["act_year"] = datetime.date.today().year
 
 		#Ueberpruefung ob die Seite gerendert werden soll wenn Nutzer nicht angemeldet ist
-		if not self.nutzer and template != "front.html" and template != "back.html" and template != "trockenmauer.html": #Letzterer Teil sollte spaeter entfernt werden um das Back-End zu schuetzen
+		if not self.nutzer and template != "front.html": #and template != "back.html"
 			self.write(self.render_str("error.html", **kw))
 		else:
 			self.write(self.render_str(template, **kw))	
@@ -105,6 +105,12 @@ class FrontHandler(AppHandler):
 
 class BackHandler(AppHandler):
 	def get(self):
+		#Pruefe ob ein Admin angelegt ist, wenn nicht, dann lege an
+		admin = databases.User.by_name("Admin")
+		if not admin:
+			databases.User.create_admin()
+			self.redirect("/")
+
 		initialize_users = self.request.get("btn-initialize-users")
 		if initialize_users:
 			databases.User.create_initial_users()
@@ -160,6 +166,10 @@ class BackHandler(AppHandler):
 class MainHandler(AppHandler):
 	def get(self):
 		params = dict(current_week=databases.Calendar.get_current_week())
+
+		params["last_visit"] = databases.User.check_and_update_visit(self.nutzer).strftime("%d.%m.%Y")
+		params["new_activities"] = databases.get_new_activities(self.nutzer, params["last_visit"])
+
 		self.render("main.html", **params)
 
 class SettingsHandler(AppHandler):

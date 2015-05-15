@@ -86,6 +86,10 @@ a:hover {
 	width: 40px;
 }
 
+.avatar-medium {
+	width: 100px;
+}
+
 .single-row-form-element {
 	width: 100%;
 }

@@ -1,5 +1,7 @@
 import datetime
 
-today = datetime.date.today() + 7
+beate = datetime.date(1958,5,13).year
 
-print(today)
+today = datetime.date.today().year
+
+print("Mama wird "+str(today-beate)+" Jahre alt.")

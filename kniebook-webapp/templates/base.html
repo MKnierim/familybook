@@ -18,11 +18,11 @@
 			<div class="row">
 				<div class="col-xs-10 text-right">
 					<h5>Willkommen zum <a href="/">kniebook</a></h5>
-					<h5>{{nutzer}}</h5>
+					<h5>{{nutzer.username}}</h5>
 				</div>
 				<div class="col-xs-2">
 					{% if nutzer %}
-					<img src="images/avatare/{{avatar}}" class="img-responsive img-circle avatar-small">
+					<img src="images/avatare/{{nutzer.avatar}}" class="img-responsive img-circle avatar-small">
 					{% endif %}
 				</div>
 			</div>
@@ -40,10 +40,9 @@
 						<a href="/main" class="btn btn-season">Aktuelles</a>
 						<a href="/termine" class="btn btn-season">Termine</a>
 						<a href="/blog" class="btn btn-season">Blog</a>
-						{% if nutzer == "Admin" %}		
-							<a href="/back" class="btn btn-season">Back-end</a>
-						{% else %}
-							<!-- <a href="/settings" class="btn btn-season">Einstellungen</a> -->
+						<a href="/settings" class="btn btn-season">Einstellungen</a>
+						{% if nutzer.username == "Admin" %}		
+						<a href="/back" class="btn btn-season">Back-end</a>
 						{% endif %}
 						<a href="/logout" class="btn btn-season">Abmelden</a>
 					</div>

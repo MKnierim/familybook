@@ -4,7 +4,9 @@
 		<div class="col-md-12 text-center">
 			<h5>Willkommen zum</h5>
 			<h1>kniebook</h1>
-			<h5>{{nutzer}}</h5>
+			{% if nutzer %}
+			<h5>{{nutzer.username}}</h5>
+			{% endif %}
 		</div>
 	</div>
 {% endblock %}
@@ -35,10 +37,9 @@
 			<a href="/main" class="btn btn-season">Aktuelles</a>
 			<a href="/termine" class="btn btn-season">Termine</a>
 			<a href="/blog" class="btn btn-season">Blog</a>
-			{% if nutzer == "Admin" %}		
-				<a href="/back" class="btn btn-season">Back-end</a>
-			{% else %}
-				<!-- <a href="/settings" class="btn btn-season">Einstellungen</a> -->
+			<a href="/settings" class="btn btn-season">Einstellungen</a>
+			{% if nutzer.username == "Admin" %}		
+			<a href="/back" class="btn btn-season">Back-end</a>
 			{% endif %}
 			<a href="/logout" class="btn btn-season">Abmelden</a>
 		</div>
