@@ -21,3 +21,11 @@ def check_season():
 	elif heute >= datetime.date(akt_jahr-1,12,21):
 		return "winter.css"
 
+def season_choice(ui_choice):
+	if not ui_choice in ["winter", "fruehling", "sommer", "herbst", "auto"]:
+		ui_choice = "auto"
+
+	if ui_choice == "auto":
+		return check_season()
+	else:
+		return ui_choice+".css"

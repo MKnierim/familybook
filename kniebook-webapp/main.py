@@ -55,8 +55,10 @@ class AppHandler(webapp2.RequestHandler):
 	def render(self, template, **kw):
 		if self.nutzer:
 			kw["nutzer"] = self.nutzer
+			kw["season"] = seasons.season_choice(self.nutzer.ui_color)
+		else:
+			kw["season"] = seasons.check_season()
 
-		kw["season"] = seasons.check_season()
 		kw["akt_datum"] = datetime.date.today().strftime("%d.%m.%Y")
 		kw["act_year"] = datetime.date.today().year
 
@@ -176,6 +178,50 @@ class SettingsHandler(AppHandler):
 	def get(self):
 		self.render("settings.html")
 
+	def post(self):
+		self.change_design()
+		self.change_pw()
+
+	def change_design(self):
+		design_choices = ["winter", "fruehling", "sommer", "herbst", "auto"]
+
+		for entry in design_choices:
+			change = self.request.get(entry)
+			if change:
+				change_to = entry
+				self.nutzer.ui_color = change_to
+				self.nutzer.put()
+				self.redirect("/settings")
+				break
+
+	def change_pw(self):
+		error = False
+		success = False
+		params = dict(old_pw = self.request.get("old_pw"),
+						new_pw = self.request.get("new_pw"),
+						new_pw_again = self.request.get("new_pw_again"))
+
+		if not params["old_pw"] == self.nutzer.password: #Vorsicht hier, muss eventuell spaeter angepasst werden
+			params["error"] = "Das alte Passwort war falsch."
+			error = True 
+		elif not databases.valid_password(params["new_pw"]):
+			params["error"] = "Das ist kein gueltiges neues Passwort."
+			error = True
+		elif params["new_pw"] != params["new_pw_again"]:
+			params["error"] = "Die beiden neuen Passworter stimmen nicht ueberein."
+			error = True
+
+		if error:
+			self.render("settings.html", **params)
+		else:
+			self.nutzer.password = params["new_pw"]
+			self.nutzer.password_hash = security.make_pw_hash(params["new_pw"])
+			self.nutzer.put()
+
+			params["success"] = "Das Passwort wurde erfolgreich geaendert."
+			self.render("settings.html", **params)
+
+
 class TermineHandler(AppHandler):
 	def get(self):
 		params = dict(dates=databases.Calendar.get_dates_ahead())
@@ -224,6 +270,10 @@ class BlogHandler(AppHandler):
 		params = dict(posts = databases.list_entries(databases.Post,"-created",5))
 		self.render("blog.html", **params)
 
+class ForumHandler(AppHandler):
+	def get(self):
+		self.render("forum.html")
+
 class LogoutHandler(AppHandler):
 	def get(self):
 		self.logout_cookie()
@@ -237,5 +287,6 @@ app = webapp2.WSGIApplication([
 	("/termine", TermineHandler),
 	("/terminarchiv", TermineArchivHandler),
 	("/blog", BlogHandler),
+	("/forum", ForumHandler),
 	("/logout", LogoutHandler)
 ], debug=True)

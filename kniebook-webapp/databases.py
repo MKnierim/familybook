@@ -49,7 +49,7 @@ class User(db.Model):
 	email = db.StringProperty()
 	avatar = db.StringProperty(default="guest-reg.jpg")
 	cal_color = db.StringProperty()
-	ui_color = db.StringProperty(choices=["winter", "fruehling", "sommer", "herbst", "auto"]) #Vll nicht so sinnvoll oder notwendig...
+	ui_color = db.StringProperty(default="auto", choices=["winter", "fruehling", "sommer", "herbst", "auto"])
 	last_visit = db.DateProperty(default=datetime.date(2015,1,1))
 
 	@classmethod

@@ -74,6 +74,10 @@ a:hover {
 	margin: 0 auto;
 }
 
+.form-full {
+	width: 100%;
+}
+
 .btn {
 	margin-top: 3px;
 	margin-bottom: 3px;
@@ -99,4 +103,55 @@ a:hover {
 	max-width: 100%;
 	height: auto;
 	margin: 0 auto;
+}
+
+.success {
+	color: #1A5E52;
+}
+
+/* ------------------------------------ */
+/* Saisonale Stylings */
+/* ------------------------------------ */
+.btn-winter {
+	color: #fff;
+	background-color: #294273;
+}
+
+.btn-winter:hover,
+.btn-winter:focus,
+.btn-winter.focus {
+	color: #4168B5;
+}
+
+.btn-fruehling {
+	color: #fff;
+	background-color: #2DA690;
+}
+
+.btn-fruehling:hover,
+.btn-fruehling:focus,
+.btn-fruehling.focus {
+	color: #1A5E52;
+}
+
+.btn-sommer {
+	color: #fff;
+	background-color: #F29441;
+}
+
+.btn-sommer:hover,
+.btn-sommer:focus,
+.btn-sommer.focus {
+	color: #A6652D;
+}
+
+.btn-herbst {
+	color: #fff;
+	background-color: #D94B2B;
+}
+
+.btn-herbst:hover,
+.btn-herbst:focus,
+.btn-herbst.focus {
+	color: #732817;
 }

@@ -20,9 +20,9 @@ a:hover {
 	border-color: #ccc;
 }
 
-.btn:hover,
-.btn:focus,
-.btn.focus {
+.btn-season:hover,
+.btn-season:focus,
+.btn-season.focus {
 	color: #294273;
 	text-decoration: none;
 }
