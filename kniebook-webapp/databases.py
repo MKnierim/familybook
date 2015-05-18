@@ -10,7 +10,7 @@ import security
 # ---
 USER_RE = re.compile(r"^[a-zA-Z0-9_-]{3,20}$")
 PASS_RE = re.compile(r"^.{3,20}$")
-# EMAIL_RE  = re.compile(r'^[\S]+@[\S]+\.[\S]+$')
+EMAIL_RE  = re.compile(r'^[\S]+@[\S]+\.[\S]+$') #Muss ich noch mal uerberpruefen
 
 def list_entries(database, order_val=None, limit=None):
 	return database.all().order(order_val).fetch(limit=None)
@@ -38,13 +38,13 @@ def valid_username(user):
 def valid_password(password):
 	return password and PASS_RE.match(password)
 
-# def valid_email(email):
-#     return not email or EMAIL_RE.match(email)
+def valid_email(email):
+	return not email or EMAIL_RE.match(email)
 
 class User(db.Model):
 	username = db.StringProperty(required=True) #Hier kann ich als Argument validator="" eine Funktion aufrufen die Validitaet ueberprueft. Zb ein Matching mit regular expressions waere denkbar.
-	password = db.StringProperty(required=True)
-	password_hash = db.StringProperty()
+	# password = db.StringProperty(required=True)
+	password_hash = db.StringProperty(required=True)
 	geburtsdatum = db.DateProperty()
 	email = db.StringProperty()
 	avatar = db.StringProperty(default="guest-reg.jpg")
@@ -84,44 +84,45 @@ class User(db.Model):
 
 	@classmethod
 	def create_knierims(cls):
-		knierims = [["Beate", datetime.date(1958,5,13), "beate@kniebook.de", "bk-reg.jpg", "#F2E14C"],
-					["Thomas", datetime.date(1960,11,19), "thomas@kniebook.de", "tk-reg.jpg", "#D94B2B"],
-					["David", datetime.date(1986,6,18), "david@kniebook.de", "dk-reg.jpg", "#F29441"],
-					["Franzi", datetime.date(1991,12,15), "franzi@kniebook.de", "franzi-reg.jpg", "#F29441"],
-					["Michael", datetime.date(1988,4,10), "michael@kniebook.de", "mk1-reg.jpg", "#2DA690"],
-					["Matthias", datetime.date(1991,1,19), "matthias@kniebook.de", "mk2-reg.jpg", "#294273"]]
+		knierims = [["Beate", "XvQJFZnNnD6G9qwj", datetime.date(1958,5,13), "beate@kniebook.de", "bk-reg.jpg", "#F2E14C"],
+					["Thomas", "UcMRWXNsTMGj8r8E", datetime.date(1960,11,19), "thomas@kniebook.de", "tk-reg.jpg", "#D94B2B"],
+					["David", "NTHfnzZ3mKzAM9AZ", datetime.date(1986,6,18), "david@kniebook.de", "dk-reg.jpg", "#F29441"],
+					["Franzi", "PHe2UsbpCRuUbqA3", datetime.date(1991,12,15), "franzi@kniebook.de", "franzi-reg.jpg", "#F29441"],
+					["Michael", "wKxtEZgJVa8T7mEp", datetime.date(1988,4,10), "michael@kniebook.de", "mk1-reg.jpg", "#2DA690"],
+					["Matthias", "n32paLbaKZRqXLPd", datetime.date(1991,1,19), "matthias@kniebook.de", "mk2-reg.jpg", "#294273"]]
 
 		for entry in knierims:
-			random_pw = security.make_salt(12)
+			# random_pw = security.make_salt(12)
 			new_user = cls(username = entry[0], 
-							password = random_pw,
-							password_hash = security.make_pw_hash(random_pw),
-							geburtsdatum = entry[1],
-							email = entry[2],
-							avatar= entry[3],
-							cal_color = entry[4])
+							# password = entry[1],
+							password_hash = security.make_pw_hash(entry[1]),
+							geburtsdatum = entry[2],
+							email = entry[3],
+							avatar= entry[4],
+							cal_color = entry[5])
 			new_user.put()
 
 			#Trage alle Geburtstage in Kalender ein
-			birthday_date = entry[1].replace(year=datetime.date.today().year)
+			birthday_date = entry[2].replace(year=datetime.date.today().year)
 			new_date = Calendar(date = birthday_date,
-								title = entry[0]+" "+str(datetime.date.today().year-entry[1].year)+". Geburtstag",
+								title = entry[0]+" "+str(datetime.date.today().year-entry[2].year)+". Geburtstag",
 								author = new_user)
 			new_date.put()
 
 	@classmethod
 	def create_admin(cls):
 		new_admin = cls(username = "Admin", 
-						password = "admin",
+						# password = "admin",
 						password_hash = security.make_pw_hash("admin"),
 						geburtsdatum=datetime.date.today(),
+						email="michael@kniebook.de",
 						avatar="admin-reg.jpg")
 		new_admin.put()
 
 	@classmethod
 	def create_guest(cls):
 		new_guest = cls(username = "Gast", 
-						password = "gast",
+						# password = "gast",
 						password_hash = security.make_pw_hash("gast"),
 						geburtsdatum=datetime.date.today(),
 						avatar="guest-reg.jpg")

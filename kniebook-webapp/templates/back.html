@@ -34,9 +34,9 @@
 							<tr>
 								<th>Nr.</th>
 								<th>Nutzername</th>
-								<th>Passwort</th>
 								<th>Geburtsdatum</th>
 								<th>Avatar</th>
+								<th>Kontrolle</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -44,9 +44,13 @@
 							<tr>
 								<td>{{users.index(entry) + 1}}</td>
 								<td>{{entry.username}}</td>
-								<td>{{entry.password}}</td>
 								<td>{{entry.geburtsdatum.strftime("%d.%m.%Y")}}</td>
 								<td><img src="images/avatare/{{entry.avatar}}" class="img-responsive img-circle avatar-small"></td>
+								<td>
+									<form method="post">
+										<button type="submit" name="delete_user" value="{{entry.username}}" class="btn btn-default btn-xs">Löschen</button>
+									</form>
+								</td>
 							</tr>
 						{% endfor %}
 						</tbody>
@@ -68,11 +72,11 @@
 	<div class="row">
 		<div class="col-md-6 text-center">
 			<h5>Algorithmen</h5>
-			<form>
-				<button type="submit" name="btn-initialize-users" formmethod="get" value="on" class="btn btn-default">Initialisiere Nutzer</button>
+			<form method="post">
+				<button type="submit" name="btn-initialize-users" value="on" class="btn btn-default">Initialisiere Nutzer</button>
 			</form>
-			<form>
-				<button type="submit" name="btn-delete-all-users" formmethod="get" value="on" class="btn btn-default">Lösche alle Nutzer</button>
+			<form method="post">
+				<button type="submit" name="btn-delete-all-users" value="on" class="btn btn-default">Lösche alle Nutzer</button>
 			</form>
 		</div>
 		<div class="col-md-6 text-center">
@@ -82,7 +86,7 @@
 				<div class="error">{{error_username}}</div>
 				<input type="password" name="n_pw" placeholder="Passwort" class="form-control">
 				<div class="error">{{error_pw}}</div>
-				<input type="submit" value="Anlegen" class="btn btn-default">
+				<button type="submit" value="on" name="create_new_user" class="btn btn-default">Anlegen</button>
 			</form>
 		</div>
 	</div>
@@ -101,8 +105,8 @@
 	<div class="row">
 		<div class="col-md-12 text-center">
 			<h5>Algorithmen</h5>
-			<form>
-				<button type="submit" name="btn-delete-all-dates" formmethod="get" value="on" class="btn btn-default">Lösche alle Termine</button>
+			<form method="post">
+				<button type="submit" name="btn-delete-all-dates" value="on" class="btn btn-default">Lösche alle Termine</button>
 			</form>
 		</div>
 	</div>

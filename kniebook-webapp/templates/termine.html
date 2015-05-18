@@ -25,6 +25,13 @@
 						<dt>Beschreibung:</dt>
 						<dd>{{entry.description}}</dd>
 						{% endif %}
+						<dt>Autor:</dt>
+						<dd>{{entry.author.username}}</dd>
+
+						{% if nutzer.username == "Admin" or nutzer.username == entry.author.username %}
+						<dt>Kontrolle:</dt>
+						<dd><form method="post"><button type="submit" name="delete_date" value="{{entry.key().id()}}" class="btn-link btn-xs">Löschen</button></form></dd>
+						{% endif %}
 					</dl>
 				{% endfor %}
 			{% else %}
@@ -73,7 +80,7 @@
 					<label>Beschreibung</label>
 					<textarea name="description" value="{{description}}" class="form-control" rows="6"></textarea>
 				</div>
-				<input type="submit" value="Eintragen" class="btn btn-default">
+				<button type="submit" name="create_new_date" value="on" class="btn btn-default">Eintragen</button>
 			</form>
 		</div>
 	</div>

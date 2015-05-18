@@ -113,57 +113,68 @@ class BackHandler(AppHandler):
 			databases.User.create_admin()
 			self.redirect("/")
 
+		self.render("back.html", users=databases.list_entries(databases.User,"geburtsdatum"))
+
+	def post(self):
 		initialize_users = self.request.get("btn-initialize-users")
+		delete_all_users = self.request.get("btn-delete-all-users")
+		delete_user = self.request.get("delete_user")
+		delete_all_dates = self.request.get("btn-delete-all-dates")
+		create_new_user = self.request.get("create_new_user")
+
 		if initialize_users:
 			databases.User.create_initial_users()
 			time.sleep(.2)
 			self.redirect("/back")
 
-		delete_users = self.request.get("btn-delete-all-users")
-		if delete_users:
+		elif delete_all_users:
 			databases.delete_all_entries(databases.User)
 			time.sleep(.2)
 			self.redirect("/back")
 
-		delete_dates = self.request.get("btn-delete-all-dates")
-		if delete_dates:
+		elif delete_user:
+			user = databases.User.by_name(delete_user)
+			user.delete()
+			time.sleep(.2)
+			self.redirect("/back")
+
+		elif delete_all_dates:
 			databases.delete_all_entries(databases.Calendar)
 			time.sleep(.2)
 			self.redirect("/back")
 
-		self.render("back.html", users = databases.list_entries(databases.User,"geburtsdatum"))
+		elif create_new_user:
+			self.create_new_user()
 
-	def post(self):
-		error = False
-		new_user = self.request.get("n_nutzer")
-		new_pw = self.request.get("n_pw")
-		new_pw_wdh = self.request.get("n_pw_wdh")
+	def create_new_user(self):
+		self.redirect("/back")
+	# 	error = False
+	# 	new_user = self.request.get("n_nutzer")
+	# 	new_pw = self.request.get("n_pw")
+	# 	new_pw_wdh = self.request.get("n_pw_wdh")
 
-		params = dict(users = databases.list_all_users(),
-						n_nutzer=new_user)
+	# 	if not databases.valid_username(new_user):
+	# 		params["error_username"] = "Das ist kein gueltiger Nutzername."
+	# 		error = True
+	# 	elif databases.User.by_name(new_user): #Sicherstellen, dass der Nutzer noch nicht existiert
+	# 		params["error_username"] = "Dieser Nutzername ist bereits vergeben."
+	# 		error = True
 
-		if not databases.valid_username(new_user):
-			params["error_username"] = "Das ist kein gueltiger Nutzername."
-			error = True
-		elif databases.User.by_name(new_user): #Sicherstellen, dass der Nutzer noch nicht existiert
-			params["error_username"] = "Dieser Nutzername ist bereits vergeben."
-			error = True
+	# 	if not databases.valid_password(new_pw):
+	# 		params["error_pw"] = "Das ist kein gueltiges Passwort."
+	# 		error = True
 
-		if not databases.valid_password(new_pw):
-			params["error_pw"] = "Das ist kein gueltiges Passwort."
-			error = True
+	# 	# Kann ich integrieren wenn ich Nutzer selbst anlegen lassen will
+	# 	# elif new_pw != new_pw_wdh:
+	# 	# 	params["error_pw_wdh"] = "Die beiden Passworter stimmen nicht ueberein."
+	# 	# 	error = True
 
-		# Kann ich integrieren wenn ich Nutzer selbst anlegen lassen will
-		# elif new_pw != new_pw_wdh:
-		# 	params["error_pw_wdh"] = "Die beiden Passworter stimmen nicht ueberein."
-		# 	error = True
-
-		if error:
-			self.render("back.html", **params)
-		else:
-			databases.User.register(new_user, new_pw)
-			time.sleep(.1)
-			self.redirect("/back")
+	# 	if error:
+	# 		self.render("back.html", **params)
+	# 	else:
+	# 		databases.User.register(new_user, new_pw)
+	# 		time.sleep(.1)
+	# 		self.redirect("/back")
 
 class MainHandler(AppHandler):
 	def get(self):
@@ -179,20 +190,25 @@ class SettingsHandler(AppHandler):
 		self.render("settings.html")
 
 	def post(self):
-		self.change_design()
-		self.change_pw()
+		btn_change_design = self.request.get("change_design")
+		btn_change_pw = self.request.get("")
+		btn_change_email = self.request.get("")
 
-	def change_design(self):
+		if btn_change_design:
+			self.change_design(btn_change_design)
+		elif btn_change_pw:
+			self.change_pw()
+		elif btn_change_email:
+			self.change_email()
+
+	def change_design(self, choice):
 		design_choices = ["winter", "fruehling", "sommer", "herbst", "auto"]
 
-		for entry in design_choices:
-			change = self.request.get(entry)
-			if change:
-				change_to = entry
-				self.nutzer.ui_color = change_to
-				self.nutzer.put()
-				self.redirect("/settings")
-				break
+		if choice in design_choices:
+			self.nutzer.ui_color = choice
+			self.nutzer.put()
+		
+		self.redirect("/settings")
 
 	def change_pw(self):
 		error = False
@@ -202,13 +218,13 @@ class SettingsHandler(AppHandler):
 						new_pw_again = self.request.get("new_pw_again"))
 
 		if not params["old_pw"] == self.nutzer.password: #Vorsicht hier, muss eventuell spaeter angepasst werden
-			params["error"] = "Das alte Passwort war falsch."
+			params["error_pw"] = "Das alte Passwort war falsch."
 			error = True 
 		elif not databases.valid_password(params["new_pw"]):
-			params["error"] = "Das ist kein gueltiges neues Passwort."
+			params["error_pw"] = "Das ist kein gueltiges neues Passwort."
 			error = True
 		elif params["new_pw"] != params["new_pw_again"]:
-			params["error"] = "Die beiden neuen Passworter stimmen nicht ueberein."
+			params["error_pw"] = "Die beiden neuen Passworter stimmen nicht ueberein."
 			error = True
 
 		if error:
@@ -218,9 +234,26 @@ class SettingsHandler(AppHandler):
 			self.nutzer.password_hash = security.make_pw_hash(params["new_pw"])
 			self.nutzer.put()
 
-			params["success"] = "Das Passwort wurde erfolgreich geaendert."
+			params["success_pw"] = "Das Passwort wurde erfolgreich geaendert."
 			self.render("settings.html", **params)
 
+	def change_email(self):
+		error = False
+		success = False
+		params = dict(new_email = self.request.get("new_email"))
+
+		if not databases.valid_email(params["new_email"]):
+			params["error_email"] = "Das ist keine gueltige neues E-Mail Adresse."
+			error = True
+
+		if error:
+			self.render("settings.html", **params)
+		else:
+			self.nutzer.email = params["new_email"]
+			self.nutzer.put()
+
+			params["success_email"] = "Die E-Mail Adresse wurde erfolgreich geaendert."
+			self.render("settings.html", **params)
 
 class TermineHandler(AppHandler):
 	def get(self):
@@ -228,6 +261,16 @@ class TermineHandler(AppHandler):
 		self.render("termine.html", **params)
 
 	def post(self):
+		create_new_date = self.request.get("create_new_date")
+		btn_delete_date = self.request.get("delete_date")
+
+		if create_new_date:
+			self.create_new_date()
+		elif btn_delete_date:
+			self.delete_date(btn_delete_date)
+			
+
+	def create_new_date(self):
 		params = dict(date = datetime.datetime.strptime(self.request.get("date"),"%Y-%m-%d").date(),
 					# start_time = self.request.get("start_time"),
 					# end_time = self.request.get("end_time"),
@@ -260,10 +303,26 @@ class TermineHandler(AppHandler):
 			time.sleep(.1)
 			self.redirect("/termine")
 
+	def delete_date(self, key):
+		databases.Calendar.get_by_id(int(key)).delete()
+		time.sleep(.2)
+		self.redirect("/termine")
+
 class TermineArchivHandler(AppHandler):
 	def get(self):
 		params = dict(old_dates=databases.Calendar.get_dates_before())
 		self.render("termine_archiv.html", **params)
+
+	def post(self):
+		btn_delete_date = self.request.get("delete_date")
+
+		if btn_delete_date:
+			self.delete_date(btn_delete_date)
+
+	def delete_date(self, key):
+		databases.Calendar.get_by_id(int(key)).delete()
+		time.sleep(.2)
+		self.redirect("/terminarchiv")
 
 class BlogHandler(AppHandler):
 	def get(self):
