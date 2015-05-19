@@ -85,12 +85,12 @@ a:hover {
 
 .dl-horizontal dt {
 	text-align: left;
-	width: 100px;
+	width: 80px;
 }
 
 .dl-horizontal dd {
 	text-align: left;
-	margin-left: 100px;
+	margin-left: 80px;
 	width: 200px;
 }
 
@@ -118,6 +118,11 @@ a:hover {
 
 .success {
 	color: #1A5E52;
+}
+
+.table-date-concern {
+	width: 70px;
+	text-align: center;
 }
 
 /* ------------------------------------ */
@@ -165,4 +170,38 @@ a:hover {
 .btn-herbst:focus,
 .btn-herbst.focus {
 	color: #732817;
+}
+
+/* ------------------------------------ */
+/* User Stylings */
+/* ------------------------------------ */
+
+.beate {
+	color: #fff;
+	background-color: #F2E14C;
+	fill: #F2E14C;
+}
+
+.thomas {
+	color: #fff;
+	background-color: #D94B2B;
+	fill: #D94B2B;
+}
+
+.david {
+	color: #fff;
+	background-color: #F29441;
+	fill: #F29441;
+}
+
+.michael {
+	color: #fff;
+	background-color: #2DA690;
+	fill: #2DA690;
+}
+
+.matthias {
+	color: #fff;
+	background-color: #294273;
+	fill: #294273;
 }
