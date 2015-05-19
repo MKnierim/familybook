@@ -83,6 +83,17 @@ a:hover {
 	margin-bottom: 3px;
 }
 
+.dl-horizontal dt {
+	text-align: left;
+	width: 100px;
+}
+
+.dl-horizontal dd {
+	text-align: left;
+	margin-left: 100px;
+	width: 200px;
+}
+
 /* ------------------------------------ */
 /* Eigene Elemente */
 /* ------------------------------------ */

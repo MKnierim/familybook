@@ -106,7 +106,8 @@ class User(db.Model):
 			birthday_date = entry[2].replace(year=datetime.date.today().year)
 			new_date = Calendar(date = birthday_date,
 								title = entry[0]+" "+str(datetime.date.today().year-entry[2].year)+". Geburtstag",
-								author = new_user)
+								author = new_user,
+								concerned_users = [entry[0]])
 			new_date.put()
 
 	@classmethod
@@ -142,6 +143,7 @@ class Calendar(db.Model):
 	title = db.StringProperty(required=True)
 	description = db.TextProperty()
 	author = db.ReferenceProperty()
+	concerned_users = db.ListProperty(str)
 	created = db.DateProperty(auto_now_add=True)
 
 	@classmethod

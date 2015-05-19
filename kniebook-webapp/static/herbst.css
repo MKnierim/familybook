@@ -26,3 +26,12 @@ a:hover {
 	color: #D94B2B;
 	text-decoration: none;
 }
+
+.btn-link {
+	color: #732817;
+	padding: 0;
+}
+.btn-link:active,
+.btn-link:hover {
+	color: #D94B2B;
+}
