@@ -32,27 +32,29 @@
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-md-12 text-center">
+		<div class="col-md-6 text-center">
 			<form method="post">
 				<div class="form-group">
 					<label>Passwort ändern</label>
 					<input type="password" name="old_pw" placeholder="Altes Passwort" class="form-control">
 					<input type="password" name="new_pw" placeholder="Neues Passwort" class="form-control">
 					<input type="password" name="new_pw_again" placeholder="Neues Passwort wiederholen" class="form-control">
-					<input type="submit" value="Ändern" class="btn btn-default">
+					<button type="submit" name="btn_change_pw" value="on" class="btn btn-default">Ändern</button>
 					<div class="error">{{error_pw}}</div>
 					<div class="success">{{success_pw}}</div>
 				</div>
 			</form>
-			<!-- <form method="post">
+		</div>
+		<div class="col-md-6 text-center">
+			<form method="post">
 				<div class="form-group">
 					<label>E-Mail ändern</label>
 					<input type="text" name="new_email" placeholder="Neue E-Mail Adresse" class="form-control">
-					<input type="submit" value="Ändern" class="btn btn-default">
+					<button type="submit" name="btn_change_email" value="on" class="btn btn-default">Ändern</button>
 					<div class="error">{{error_email}}</div>
 					<div class="success">{{success_email}}</div>
 				</div>
-			</form> -->
+			</form>
 		</div>
 	</div>
 	

@@ -191,8 +191,8 @@ class SettingsHandler(AppHandler):
 
 	def post(self):
 		btn_change_design = self.request.get("change_design")
-		btn_change_pw = self.request.get("")
-		btn_change_email = self.request.get("")
+		btn_change_pw = self.request.get("btn_change_pw")
+		btn_change_email = self.request.get("btn_change_email")
 
 		if btn_change_design:
 			self.change_design(btn_change_design)
@@ -217,7 +217,7 @@ class SettingsHandler(AppHandler):
 						new_pw = self.request.get("new_pw"),
 						new_pw_again = self.request.get("new_pw_again"))
 
-		if not params["old_pw"] == self.nutzer.password: #Vorsicht hier, muss eventuell spaeter angepasst werden
+		if not security.validate_pw(params["old_pw"], self.nutzer.password_hash):
 			params["error_pw"] = "Das alte Passwort war falsch."
 			error = True 
 		elif not databases.valid_password(params["new_pw"]):

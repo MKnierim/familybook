@@ -39,7 +39,7 @@ def valid_password(password):
 	return password and PASS_RE.match(password)
 
 def valid_email(email):
-	return not email or EMAIL_RE.match(email)
+	return email and EMAIL_RE.match(email)
 
 class User(db.Model):
 	username = db.StringProperty(required=True) #Hier kann ich als Argument validator="" eine Funktion aufrufen die Validitaet ueberprueft. Zb ein Matching mit regular expressions waere denkbar.
