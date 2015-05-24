@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from google.appengine.ext import db
 
 import datetime
@@ -88,7 +90,7 @@ class User(db.Model):
 					["Thomas", "UcMRWXNsTMGj8r8E", datetime.date(1960,11,19), "thomas@kniebook.de", "tk-reg.jpg", "#D94B2B"],
 					["David", "NTHfnzZ3mKzAM9AZ", datetime.date(1986,6,18), "david@kniebook.de", "dk-reg.jpg", "#F29441"],
 					["Franzi", "PHe2UsbpCRuUbqA3", datetime.date(1991,12,15), "franzi@kniebook.de", "franzi-reg.jpg", "#F29441"],
-					["Michael", "wKxtEZgJVa8T7mEp", datetime.date(1988,4,10), "michael@kniebook.de", "mk1-reg.jpg", "#2DA690"],
+					["Michael", "a", datetime.date(1988,4,10), "michael@kniebook.de", "mk1-reg.jpg", "#2DA690"],
 					["Matthias", "n32paLbaKZRqXLPd", datetime.date(1991,1,19), "matthias@kniebook.de", "mk2-reg.jpg", "#294273"]]
 
 		for entry in knierims:
@@ -153,7 +155,8 @@ class Calendar(db.Model):
 						# end_time = kw["end_time"],
 						title = kw["title"],
 						description = kw["description"],
-						author = kw["author"])
+						author = kw["author"],
+						concerned_users = kw["concerned_users"])
 
 		new_date.put()
 

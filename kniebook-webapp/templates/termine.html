@@ -55,33 +55,31 @@
 								{% endif %}
 							</dl>
 							</td>
-							{% for user_concern in entry.concerned_users %}
-								<td class="text-center">
-									{% if user_concern == "Beate" %}
-										<svg height="40" width="40"><circle cx="20" cy="20" r="20" class="beate"></svg>
-									{% endif %}
-								</td>
-								<td class="text-center">
-									{% if user_concern == "Thomas" %}
-										<svg height="40" width="40"><circle cx="20" cy="20" r="20" class="thomas"></svg>
-									{% endif %}
-								</td>	
-								<td class="text-center">
-									{% if user_concern == "David" or user_concern == "Franzi" %}
-										<svg height="40" width="40"><circle cx="20" cy="20" r="20" class="david"></svg>
-									{% endif %}
-								</td>
-								<td class="text-center">
-									{% if user_concern == "Michael" %}
-										<svg height="40" width="40"><circle cx="20" cy="20" r="20" class="michael"></svg>
-									{% endif %}
-								</td>
-								<td class="text-center">
-									{% if user_concern == "Matthias" %}
-										<svg height="40" width="40"><circle cx="20" cy="20" r="20" class="matthias"></svg>
-									{% endif %}
-								</td>
-							{% endfor %}
+							<td class="text-center">
+								{% if "Beate" in entry.concerned_users %}
+									<svg height="40" width="40"><circle cx="20" cy="20" r="20" class="beate"></svg>
+								{% endif %}
+							</td>
+							<td class="text-center">
+								{% if "Thomas" in entry.concerned_users %}
+									<svg height="40" width="40"><circle cx="20" cy="20" r="20" class="thomas"></svg>
+								{% endif %}
+							</td>	
+							<td class="text-center">
+								{% if "David" in entry.concerned_users or "Franzi" in entry.concerned_users %}
+									<svg height="40" width="40"><circle cx="20" cy="20" r="20" class="david"></svg>
+								{% endif %}
+							</td>
+							<td class="text-center">
+								{% if "Michael" in entry.concerned_users %}
+									<svg height="40" width="40"><circle cx="20" cy="20" r="20" class="michael"></svg>
+								{% endif %}
+							</td>
+							<td class="text-center">
+								{% if "Matthias" in entry.concerned_users %}
+									<svg height="40" width="40"><circle cx="20" cy="20" r="20" class="matthias"></svg>
+								{% endif %}
+							</td>
 						</tr>
 					{% endfor %}
 					</tbody>
@@ -132,6 +130,17 @@
 				<div class="form-group">
 					<label>Beschreibung</label>
 					<textarea name="description" value="{{description}}" class="form-control" rows="6"></textarea>
+				</div>
+				<div class="form-group">
+					<label>Betrifft*</label>
+					<div class="checkbox">
+						<label class="checkbox-inline"><input type="checkbox" name="concern_beate" value="Beate"><img src="images/avatare/bk-reg.jpg" class="avatar-small img-circle"></label>
+						<label class="checkbox-inline"><input type="checkbox" name="concern_thomas" value="Thomas"><img src="images/avatare/tk-reg.jpg" class="avatar-small img-circle"></label>
+						<label class="checkbox-inline"><input type="checkbox" name="concern_david" value="David"><img src="images/avatare/dk-reg.jpg" class="avatar-small img-circle"></label>
+						<label class="checkbox-inline"><input type="checkbox" name="concern_michael" value="Michael"><img src="images/avatare/mk1-reg.jpg" class="avatar-small img-circle"></label>
+						<label class="checkbox-inline"><input type="checkbox" name="concern_matthias" value="Matthias"><img src="images/avatare/mk2-reg.jpg" class="avatar-small img-circle"></label>
+					</div>
+					<div class="error">{{error_concern}}</div>
 				</div>
 				<button type="submit" name="create_new_date" value="on" class="btn btn-default">Eintragen</button>
 			</form>

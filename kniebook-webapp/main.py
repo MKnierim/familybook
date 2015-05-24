@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 #
+# -*- coding: utf-8 -*-
+#
 # Copyright 2007 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,6 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
 import webapp2
 import jinja2
 import os
@@ -271,19 +274,33 @@ class TermineHandler(AppHandler):
 			
 
 	def create_new_date(self):
-		params = dict(date = datetime.datetime.strptime(self.request.get("date"),"%Y-%m-%d").date(),
+		params = dict(date = self.request.get("date"),
 					# start_time = self.request.get("start_time"),
 					# end_time = self.request.get("end_time"),
 					title = self.request.get("title"),
 					description = self.request.get("description"),
+					concerned_users = [],
 					author = self.nutzer,
 					error_date = "",
-					error_title = "")
+					error_title = "",
+					error_concern = "")
 
 		if not params["date"]:
 			params["error_date"] = "Es muss ein Datum festgelegt werden."
+		else:
+			params["date"] = datetime.datetime.strptime(params["date"],"%Y-%m-%d").date()
+
 		if not params["title"]:
 			params["error_title"] = "Es muss ein Titel eingegeben werden."
+
+		# Check if concerns have been assigned and return a list of concerned users or an error message
+		for entry in ["concern_beate", "concern_thomas", "concern_david", "concern_michael", "concern_matthias"]:
+			check = self.request.get(entry)
+			if check:
+				params["concerned_users"].append(str(check))
+
+		if not params["concerned_users"]:
+			params["error_concern"] = "Es muss mindestens ein Betroffener markiert werden."
 
 		# if not params["start_time"]:
 		# 	params["start_time"] = None #time(0,0)
@@ -296,8 +313,8 @@ class TermineHandler(AppHandler):
 		# 	end_time = params["end_time"]
 		# 	params["end_time"] = datetime.datetime.strptime(end_time,"%H:%M").time()
 
-		if params["error_date"] or params["error_title"]:
-			self.render("termine.html", **params)
+		if params["error_date"] or params["error_title"] or params["error_concern"]:
+			self.render("termine.html", dates=databases.Calendar.get_dates_ahead(), **params)
 		else:
 			databases.Calendar.input_date(**params)
 			time.sleep(.1)

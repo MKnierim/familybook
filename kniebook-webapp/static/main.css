@@ -97,6 +97,10 @@ a:hover {
 /* ------------------------------------ */
 /* Eigene Elemente */
 /* ------------------------------------ */
+.avatar-xs {
+	width: 30px;
+}
+
 .avatar-small {
 	width: 40px;
 }

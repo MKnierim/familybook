@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # import datetime
 
 # beate = datetime.date(1958,5,13).year

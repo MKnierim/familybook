@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+#
 # This is a script which is supposed to be executed when a user visits 
 # the kniebook main page or a part of the website which contains family pictures.
 # 
