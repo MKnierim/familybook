@@ -341,14 +341,14 @@ class TermineArchivHandler(AppHandler):
 		time.sleep(.2)
 		self.redirect("/terminarchiv")
 
-class BlogHandler(AppHandler):
-	def get(self):
-		params = dict(posts = databases.list_entries(databases.Post,"-created",5))
-		self.render("blog.html", **params)
+# class BlogHandler(AppHandler):
+# 	def get(self):
+# 		params = dict(posts = databases.list_entries(databases.Post,"-created",5))
+# 		self.render("blog.html", **params)
 
-class ForumHandler(AppHandler):
-	def get(self):
-		self.render("forum.html")
+# class ForumHandler(AppHandler):
+# 	def get(self):
+# 		self.render("forum.html")
 
 class LogoutHandler(AppHandler):
 	def get(self):
@@ -362,7 +362,7 @@ app = webapp2.WSGIApplication([
 	("/settings", SettingsHandler),
 	("/termine", TermineHandler),
 	("/terminarchiv", TermineArchivHandler),
-	("/blog", BlogHandler),
-	("/forum", ForumHandler),
+	# ("/blog", BlogHandler),
+	# ("/forum", ForumHandler),
 	("/logout", LogoutHandler)
 ], debug=True)

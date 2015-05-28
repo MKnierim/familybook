@@ -14,32 +14,80 @@
 	</div>
 	<div class="row">
 		<div class="col-md-12">
-			<h5 class="text-center">Termine in den nächsten 7 Tagen</h5>
+			<h5 class="text-center space-bottom">Termine in den nächsten 7 Tagen</h5>
 			{% if current_week %}
-				{% for entry in current_week %}
-					<dl class="dl-horizontal">
-						<dt>Datum:</dt>
-						<dd>{{entry.date.strftime("%d.%m.%Y")}}</dd>
-						<dt>Titel:</dt>
-						<dd>{{entry.title}}</dd>
-					</dl>
-				{% endfor %}
+			<div class="table-responsive">
+				<table class="table">
+					<tbody>
+						<thead>
+							<tr>
+								<th>Termindaten</th>
+								<th>Betrifft</th>
+								<th></th>
+								<th></th>
+								<th></th>
+								<th></th>
+							</tr>
+							<tr>
+								<th></th>
+								<th class="table-date-concern">Beate</th>
+								<th class="table-date-concern">Thomas</th>
+								<th class="table-date-concern">David</th>
+								<th class="table-date-concern">Michael</th>
+								<th class="table-date-concern">Matthias</th>
+							</tr>
+						</thead>
+					{% for entry in current_week %}
+						<tr>
+							<td>
+							<dl class="dl-horizontal">
+								<dt>Datum:</dt>
+								<dd>{{entry.date.strftime("%d.%m.%Y")}}</dd>
+								<dt>Titel:</dt>
+								<dd>{{entry.title}}</dd>
+								{% if entry.description %}
+								<dt>Beschreibung:</dt>
+								<dd>{{entry.description}}</dd>
+								{% endif %}
+
+								{% if nutzer.username == "Admin" or nutzer.username == entry.author.username %}
+								<dt></dt>
+								<dd><form method="post"><button type="submit" name="delete_date" value="{{entry.key().id()}}" class="btn-link btn-xs">Löschen</button></form></dd>
+								{% endif %}
+							</dl>
+							</td>
+							<td class="text-center">
+								{% if "Beate" in entry.concerned_users %}
+									<svg height="40" width="40"><circle cx="20" cy="20" r="20" class="beate"></svg>
+								{% endif %}
+							</td>
+							<td class="text-center">
+								{% if "Thomas" in entry.concerned_users %}
+									<svg height="40" width="40"><circle cx="20" cy="20" r="20" class="thomas"></svg>
+								{% endif %}
+							</td>	
+							<td class="text-center">
+								{% if "David" in entry.concerned_users or "Franzi" in entry.concerned_users %}
+									<svg height="40" width="40"><circle cx="20" cy="20" r="20" class="david"></svg>
+								{% endif %}
+							</td>
+							<td class="text-center">
+								{% if "Michael" in entry.concerned_users %}
+									<svg height="40" width="40"><circle cx="20" cy="20" r="20" class="michael"></svg>
+								{% endif %}
+							</td>
+							<td class="text-center">
+								{% if "Matthias" in entry.concerned_users %}
+									<svg height="40" width="40"><circle cx="20" cy="20" r="20" class="matthias"></svg>
+								{% endif %}
+							</td>
+						</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
 			{% else %}
 				<div class="text-center"><small>Diese Woche stehen keine Termine an.</small></div>
-			{% endif %}
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-md-12 text-center">
-			<h5>Neue Aktivitäten</h5>
-			<small>Seit deinem letzten Besuch am {{last_visit}}</small>
-			{% if new_activities %}
-				:<br>
-				{% for entry in new_activities %}
-					...
-				{% endfor %}
-			{% else %}
-				<br><small>gab es keine neuen Aktivitäten von anderen Nutzern.</small>
 			{% endif %}
 		</div>
 	</div>

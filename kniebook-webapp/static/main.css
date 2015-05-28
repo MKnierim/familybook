@@ -129,6 +129,25 @@ a:hover {
 	text-align: center;
 }
 
+.space-bottom {
+	margin-bottom: 10px;
+}
+
+.concern-cb input[type="checkbox"] {
+	margin-top: 5px;
+	margin-left: auto;
+  	margin-right: auto;
+	display: block;
+}
+
+.concern-cb {
+	cursor: pointer;
+}
+
+.concern-cb + .concern-cb {
+	margin-left: 10px;
+}
+
 /* ------------------------------------ */
 /* Saisonale Stylings */
 /* ------------------------------------ */

@@ -1,0 +1,18 @@
+<!-- ############################################################################################
+main.html
+############################################################################################ -->
+
+<div class="row">
+		<div class="col-md-12 text-center">
+			<h5>Neue Aktivitäten</h5>
+			<small>Seit deinem letzten Besuch am {{last_visit}}</small>
+			{% if new_activities %}
+				:<br>
+				{% for entry in new_activities %}
+					...
+				{% endfor %}
+			{% else %}
+				<br><small>gab es keine neuen Aktivitäten von anderen Nutzern.</small>
+			{% endif %}
+		</div>
+</div>
