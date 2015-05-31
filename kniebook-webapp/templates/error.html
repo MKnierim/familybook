@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block header_title %} kb Zugriff verweigert {% endblock %}
+{% block header_title %} kb Fehler {% endblock %}
 
 {% block header_content %}
 	<div class="row">
@@ -22,8 +22,17 @@
 	</div>
 	<div class="row">
 		<div class="col-md-12 text-center">
-			Auf diese Seite haben Sie leider keinen Zugriff.<br>
-			Bei Fragen wenden Sie sich bitte an den <a href="mailto:michael@kniebook.de">Systemadministrator</a>.
+			<h4 class="space-bottom">Fehler {{errorcode}}</h4>
+			<p>
+			{% if errorcode == "401" %}
+				Auf diese Seite haben Sie leider keinen Zugriff.
+			{% elif errorcode == "404" %}
+				Die gewünschte Seite konnte leider nicht gefunden werden.
+			{% elif errorcode == "500" %}
+				Bei der Verarbeitung der Anfrage ist leider ein Fehler aufgetreten.
+			{% endif %}
+			</p>
+			<p>Bei Fragen wenden Sie sich bitte an den <a href="mailto:michael@kniebook.de">Systemadministrator</a>.</p>
 		</div>
 	</div>
 {% endblock %}

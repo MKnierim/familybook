@@ -38,6 +38,26 @@ template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 # Creates a jinja2 environment based on the template folder
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape = True)
 
+# Error handlers for the WSGIApplication. See: http://webapp-improved.appspot.com/guide/exceptions.html#guide-exceptions
+def handle_401(request, response, exception):
+	# logging.exception(exception) - need to import module "logging"
+	response.set_status(401) # 401 = Unauthorized client
+	response.write(template_render("error.html", season=seasons.check_season(), errorcode="401"))
+
+def handle_404(request, response, exception):
+	# logging.exception(exception) - need to import module "logging"
+	response.set_status(404) # 404 = Not found
+	response.write(template_render("error.html", season=seasons.check_season(), errorcode="404"))
+
+def handle_500(request, response, exception):
+	# logging.exception(exception)
+	response.set_status(500) # 500 = internal server error
+	response.write(template_render("error.html", season=seasons.check_season(), errorcode="401"))
+
+def template_render(template, **kw):
+	t = jinja_env.get_template(template)
+	return t.render(kw)
+
 class AppHandler(webapp2.RequestHandler):
 	# initialize wird angeblich vor jedem request in Google App Engine durchgefuehrt.
 	# Ist hier vermutl. eine Anpassung dieser Funktion so dass Cookies durchsucht werden.
@@ -46,14 +66,6 @@ class AppHandler(webapp2.RequestHandler):
 		webapp2.RequestHandler.initialize(self, *a, **kw)
 		uid = self.read_secure_cookie('user_id')
 		self.nutzer = uid and databases.User.by_id(int(uid)) #Vorsicht mit der logischen Reinehfolge. Wenn beide True dann wird das letzte zurueck gegeben. Wenn eins false, dann wird das erste zurueck gegeben.
-
-	# Diese Funktion ist v.a. zum debuggen da. Sonst keine Funktion im Script.
-	def write(self, *a, **kw):
-		self.response.write(*a, **kw)
-
-	def render_str(self, template, **kw):
-		t = jinja_env.get_template(template)
-		return t.render(kw)
 
 	def render(self, template, **kw):
 		if self.nutzer:
@@ -67,9 +79,9 @@ class AppHandler(webapp2.RequestHandler):
 
 		#Ueberpruefung ob die Seite gerendert werden soll wenn Nutzer nicht angemeldet ist
 		if not self.nutzer and template != "front.html": #and template != "back.html"
-			self.write(self.render_str("error.html", **kw))
+			handle_401()
 		else:
-			self.write(self.render_str(template, **kw))	
+			self.response.write(template_render(template, **kw))	
 
 	def set_secure_cookie(self, name, val, expires):
 		cookie_val = security.make_hash(val)
@@ -341,10 +353,10 @@ class TermineArchivHandler(AppHandler):
 		time.sleep(.2)
 		self.redirect("/terminarchiv")
 
-# class BlogHandler(AppHandler):
-# 	def get(self):
-# 		params = dict(posts = databases.list_entries(databases.Post,"-created",5))
-# 		self.render("blog.html", **params)
+class BlogHandler(AppHandler):
+	def get(self):
+		params = dict(posts = databases.list_entries(databases.Post,"-created",5))
+		self.render("blog.html", **params)
 
 # class ForumHandler(AppHandler):
 # 	def get(self):
@@ -362,7 +374,10 @@ app = webapp2.WSGIApplication([
 	("/settings", SettingsHandler),
 	("/termine", TermineHandler),
 	("/terminarchiv", TermineArchivHandler),
-	# ("/blog", BlogHandler),
+	("/blog", BlogHandler),
 	# ("/forum", ForumHandler),
 	("/logout", LogoutHandler)
 ], debug=True)
+
+app.error_handlers[404] = handle_404
+app.error_handlers[500] = handle_500
