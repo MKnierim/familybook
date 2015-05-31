@@ -358,6 +358,11 @@ class BlogHandler(AppHandler):
 		params = dict(posts = databases.list_entries(databases.Post,"-created",5))
 		self.render("blog.html", **params)
 
+class BlogPostHandler(AppHandler):
+	def get(self, post_id): #post_id is delivered through the re pattern defined in the WSGIApplication routing
+		# params[post] = post_id
+		self.response.write(post_id)
+
 # class ForumHandler(AppHandler):
 # 	def get(self):
 # 		self.render("forum.html")
@@ -368,15 +373,16 @@ class LogoutHandler(AppHandler):
 		self.redirect("/")
 
 app = webapp2.WSGIApplication([
-	("/", FrontHandler),
-	("/back", BackHandler),
-	("/main", MainHandler),
-	("/settings", SettingsHandler),
-	("/termine", TermineHandler),
-	("/terminarchiv", TermineArchivHandler),
-	("/blog", BlogHandler),
-	# ("/forum", ForumHandler),
-	("/logout", LogoutHandler)
+	(r"/", FrontHandler), #r is for "raw" strings
+	(r"/back", BackHandler),
+	(r"/main", MainHandler),
+	(r"/settings", SettingsHandler),
+	(r"/termine", TermineHandler),
+	(r"/termine/archiv", TermineArchivHandler),
+	(r"/blog", BlogHandler),
+	(r"/blog/(\d+)", BlogPostHandler), # \(d+) is a regular expression for digits
+	# (r"/forum", ForumHandler),
+	(r"/logout", LogoutHandler)
 ], debug=True)
 
 app.error_handlers[404] = handle_404

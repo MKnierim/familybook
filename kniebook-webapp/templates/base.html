@@ -5,9 +5,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>{% block header_title %}Willkommen zum kniebook{% endblock %}</title>
 	
-	<link rel="stylesheet" href="static/bootstrap.min.css">
-	<link rel="stylesheet" href="static/main.css">
-	<link rel="stylesheet" href="static/{{season}}"> <!-- An dieser Stelle koennen saisonale Designs eingebunden werden -->
+	<link rel="stylesheet" href="/static/bootstrap.min.css">
+	<link rel="stylesheet" href="/static/main.css">
+	<link rel="stylesheet" href="/static/{{season}}"> <!-- An dieser Stelle koennen saisonale Designs eingebunden werden -->
 	<link href='http://fonts.googleapis.com/css?family=Raleway:100,300,400,900' rel='stylesheet'>
 
 </head>
@@ -22,7 +22,7 @@
 				</div>
 				<div class="col-xs-2">
 					{% if nutzer %}
-					<img src="images/avatare/{{nutzer.avatar}}" class="img-responsive img-circle avatar-small">
+					<img src="/images/avatare/{{nutzer.avatar}}" class="img-responsive img-circle avatar-small">
 					{% endif %}
 				</div>
 			</div>
