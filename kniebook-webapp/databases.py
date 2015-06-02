@@ -23,25 +23,16 @@ def delete_all_entries(database):
 		if not (database==User and entry.username=="Admin"):
 			entry.delete()
 
-def get_new_activities(user, last_visit):
-	activities = []
-	new_dates = Calendar.all().filter("created <=", datetime.date.today()).filter("created >=", last_visit).order("created").fetch(limit=None)
-	# new_posts = Post.all().filter("created <=", datetime.date.today()).filter("created >=", last_visit).filter("author !=", user).order("created").fetch(limit=None)
+# def get_new_activities(user, last_visit):
+# 	activities = []
+# 	new_dates = Calendar.all().filter("created <=", datetime.date.today()).filter("created >=", last_visit).order("created").fetch(limit=None)
+# 	# new_posts = Post.all().filter("created <=", datetime.date.today()).filter("created >=", last_visit).filter("author !=", user).order("created").fetch(limit=None)
 
-	for entry in new_dates:
-		if not entry.author == user:
-			activities.append(entry)
+# 	for entry in new_dates:
+# 		if not entry.author == user:
+# 			activities.append(entry)
 
-	return activities
-
-def valid_username(user):
-	return user and USER_RE.match(user)
-
-def valid_password(password):
-	return password and PASS_RE.match(password)
-
-def valid_email(email):
-	return email and EMAIL_RE.match(email)
+# 	return activities
 
 class User(db.Model):
 	username = db.StringProperty(required=True) #Hier kann ich als Argument validator="" eine Funktion aufrufen die Validitaet ueberprueft. Zb ein Matching mit regular expressions waere denkbar.
@@ -53,6 +44,18 @@ class User(db.Model):
 	cal_color = db.StringProperty()
 	ui_color = db.StringProperty(default="auto", choices=["winter", "fruehling", "sommer", "herbst", "auto"])
 	last_visit = db.DateProperty(default=datetime.date(2015,1,1))
+
+	@staticmethod
+	def valid_username(user):
+		return user and USER_RE.match(user)
+
+	@staticmethod
+	def valid_password(password):
+		return password and PASS_RE.match(password)
+
+	@staticmethod
+	def valid_email(email):
+		return email and EMAIL_RE.match(email)
 
 	@classmethod
 	def by_id(cls, nutzer_id):
@@ -106,7 +109,8 @@ class User(db.Model):
 
 			#Trage alle Geburtstage in Kalender ein
 			birthday_date = entry[2].replace(year=datetime.date.today().year)
-			new_date = Calendar(date = birthday_date,
+			new_date = Calendar(start_date = birthday_date,
+								end_date = birthday_date,
 								title = entry[0]+" "+str(datetime.date.today().year-entry[2].year)+". Geburtstag",
 								author = new_user,
 								concerned_users = [entry[0]])
@@ -131,17 +135,16 @@ class User(db.Model):
 						avatar="guest-reg.jpg")
 		new_guest.put()
 
-	@classmethod
-	def check_and_update_visit(cls, user):
-		last_visit = user.last_visit
-		user.last_visit = datetime.date.today()
-		user.put()
-		return last_visit
+	# @classmethod
+	# def check_and_update_visit(cls, user):
+	# 	last_visit = user.last_visit
+	# 	user.last_visit = datetime.date.today()
+	# 	user.put()
+	# 	return last_visit
 
 class Calendar(db.Model):
-	date = db.DateProperty(required=True)
-	start_time = db.TimeProperty() #default=time(0,0))
-	end_time = db.TimeProperty() #default=time(0,0))
+	start_date = db.DateProperty(required=True)
+	end_date = db.DateProperty() #set validation method here?
 	title = db.StringProperty(required=True)
 	description = db.TextProperty()
 	author = db.ReferenceProperty()
@@ -150,9 +153,8 @@ class Calendar(db.Model):
 
 	@classmethod
 	def input_date(cls, **kw):
-		new_date = cls(date = kw["date"],
-						# start_time = kw["start_time"],
-						# end_time = kw["end_time"],
+		new_date = cls(start_date = kw["start_date"],
+						end_date = kw["end_date"],
 						title = kw["title"],
 						description = kw["description"],
 						author = kw["author"],
@@ -164,15 +166,15 @@ class Calendar(db.Model):
 	def get_current_week(cls):
 		today = datetime.date.today()
 		next_week = today + datetime.timedelta(days=7)
-		return cls.all().filter("date >=", today).filter("date <=", next_week).order("date").fetch(limit=None)
+		return cls.all().filter("start_date >=", today).filter("start_date <=", next_week).order("start_date").fetch(limit=None)
 
 	@classmethod
 	def get_dates_ahead(cls, limit=None):
-		return cls.all().filter("date >=", datetime.date.today()).order("date").fetch(limit)
+		return cls.all().filter("start_date >=", datetime.date.today()).order("start_date").fetch(limit)
 
 	@classmethod
 	def get_dates_before(cls, limit=None):
-		return cls.all().filter("date <", datetime.date.today()).order("-date").fetch(limit)
+		return cls.all().filter("start_date <", datetime.date.today()).order("-start_date").fetch(limit)
 
 class Post(db.Model):
 	title = db.StringProperty(required=True)
@@ -180,10 +182,10 @@ class Post(db.Model):
 	author = db.ReferenceProperty()
 	created = db.DateProperty(auto_now_add=True)
 	last_modified = db.DateTimeProperty(auto_now=True)
+	images = db.ListProperty(str)
 
 	# Hier bin ich mir nicht ganz sicher, ob das wirklich notwendig ist
 	@classmethod
 	def render(self):
 		self._render_text = self.content.replace('\n', '<br>')
 		return render_str("post.html", p = self)
-

@@ -17,12 +17,9 @@
 # limitations under the License.
 #
 
-import webapp2
-import jinja2
-import os
-import time
-
-import datetime
+import webapp2, jinja2
+import os, time, datetime
+import logging
 
 # Modul in dem saisonale Anpassungen an das Design vorbereitet werden
 import seasons
@@ -40,19 +37,19 @@ jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), a
 
 # Error handlers for the WSGIApplication. See: http://webapp-improved.appspot.com/guide/exceptions.html#guide-exceptions
 def handle_401(request, response, exception):
-	# logging.exception(exception) - need to import module "logging"
+	logging.exception(exception)
 	response.set_status(401) # 401 = Unauthorized client
 	response.write(template_render("error.html", season=seasons.check_season(), errorcode="401"))
 
 def handle_404(request, response, exception):
-	# logging.exception(exception) - need to import module "logging"
+	logging.exception(exception)
 	response.set_status(404) # 404 = Not found
 	response.write(template_render("error.html", season=seasons.check_season(), errorcode="404"))
 
 def handle_500(request, response, exception):
-	# logging.exception(exception)
+	logging.exception(exception)
 	response.set_status(500) # 500 = internal server error
-	response.write(template_render("error.html", season=seasons.check_season(), errorcode="401"))
+	response.write(template_render("error.html", season=seasons.check_season(), errorcode="500"))
 
 def template_render(template, **kw):
 	t = jinja_env.get_template(template)
@@ -168,14 +165,14 @@ class BackHandler(AppHandler):
 	# 	new_pw = self.request.get("n_pw")
 	# 	new_pw_wdh = self.request.get("n_pw_wdh")
 
-	# 	if not databases.valid_username(new_user):
+	# 	if not databases.User.valid_username(new_user):
 	# 		params["error_username"] = "Das ist kein gueltiger Nutzername."
 	# 		error = True
 	# 	elif databases.User.by_name(new_user): #Sicherstellen, dass der Nutzer noch nicht existiert
 	# 		params["error_username"] = "Dieser Nutzername ist bereits vergeben."
 	# 		error = True
 
-	# 	if not databases.valid_password(new_pw):
+	# 	if not databases.User.valid_password(new_pw):
 	# 		params["error_pw"] = "Das ist kein gueltiges Passwort."
 	# 		error = True
 
@@ -195,8 +192,8 @@ class MainHandler(AppHandler):
 	def get(self):
 		params = dict(current_week=databases.Calendar.get_current_week())
 
-		params["last_visit"] = databases.User.check_and_update_visit(self.nutzer).strftime("%d.%m.%Y")
-		params["new_activities"] = databases.get_new_activities(self.nutzer, params["last_visit"])
+		# params["last_visit"] = databases.User.check_and_update_visit(self.nutzer).strftime("%d.%m.%Y")
+		# params["new_activities"] = databases.get_new_activities(self.nutzer, params["last_visit"])
 
 		self.render("main.html", **params)
 
@@ -235,7 +232,7 @@ class SettingsHandler(AppHandler):
 		if not security.validate_pw(params["old_pw"], self.nutzer.password_hash):
 			params["error_pw"] = "Das alte Passwort war falsch."
 			error = True 
-		elif not databases.valid_password(params["new_pw"]):
+		elif not databases.User.valid_password(params["new_pw"]):
 			params["error_pw"] = "Das ist kein gueltiges neues Passwort."
 			error = True
 		elif params["new_pw"] != params["new_pw_again"]:
@@ -257,7 +254,7 @@ class SettingsHandler(AppHandler):
 		success = False
 		params = dict(new_email = self.request.get("new_email"))
 
-		if not databases.valid_email(params["new_email"]):
+		if not databases.User.valid_email(params["new_email"]):
 			params["error_email"] = "Das ist keine gueltige neues E-Mail Adresse."
 			error = True
 
@@ -286,21 +283,21 @@ class TermineHandler(AppHandler):
 			
 
 	def create_new_date(self):
-		params = dict(date = self.request.get("date"),
-					# start_time = self.request.get("start_time"),
-					# end_time = self.request.get("end_time"),
-					title = self.request.get("title"),
-					description = self.request.get("description"),
-					concerned_users = [],
-					author = self.nutzer,
-					error_date = "",
-					error_title = "",
-					error_concern = "")
+		params = dict(start_date = self.request.get("start_date"),
+						end_date = self.request.get("end_date"),
+						title = self.request.get("title"),
+						description = self.request.get("description"),
+						concerned_users = [],
+						author = self.nutzer,
+						error_start_date = "",
+						error_end_date = "",
+						error_title = "",
+						error_concern = "")
 
-		if not params["date"]:
-			params["error_date"] = "Es muss ein Datum festgelegt werden."
+		if not params["start_date"]:
+			params["error_start_date"] = "Es muss ein Datum festgelegt werden."
 		else:
-			params["date"] = datetime.datetime.strptime(params["date"],"%Y-%m-%d").date()
+			params["start_date"] = datetime.datetime.strptime(params["start_date"],"%Y-%m-%d").date()
 
 		if not params["title"]:
 			params["error_title"] = "Es muss ein Titel eingegeben werden."
@@ -314,18 +311,7 @@ class TermineHandler(AppHandler):
 		if not params["concerned_users"]:
 			params["error_concern"] = "Es muss mindestens ein Betroffener markiert werden."
 
-		# if not params["start_time"]:
-		# 	params["start_time"] = None #time(0,0)
-		# else:
-		# 	start_time = params["start_time"]
-		# 	params["start_time"] = datetime.datetime.strptime(start_time,"%H:%M").time()
-		# if not params["end_time"]:
-		# 	params["end_time"] = None #time(0,0)
-		# else:
-		# 	end_time = params["end_time"]
-		# 	params["end_time"] = datetime.datetime.strptime(end_time,"%H:%M").time()
-
-		if params["error_date"] or params["error_title"] or params["error_concern"]:
+		if params["error_start_date"] or params["error_title"] or params["error_concern"]:
 			self.render("termine.html", dates=databases.Calendar.get_dates_ahead(), **params)
 		else:
 			databases.Calendar.input_date(**params)
@@ -351,7 +337,7 @@ class TermineArchivHandler(AppHandler):
 	def delete_date(self, key):
 		databases.Calendar.get_by_id(int(key)).delete()
 		time.sleep(.2)
-		self.redirect("/terminarchiv")
+		self.redirect("/termine/archiv")
 
 class BlogHandler(AppHandler):
 	def get(self):
@@ -385,5 +371,6 @@ app = webapp2.WSGIApplication([
 	(r"/logout", LogoutHandler)
 ], debug=True)
 
+app.error_handlers[401] = handle_401
 app.error_handlers[404] = handle_404
 app.error_handlers[500] = handle_500
