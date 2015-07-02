@@ -22,3 +22,10 @@
 # 		return ui_choice+".css"
 
 # print(season_choice("herbst"))
+
+start_date = ""
+end_date = ""
+
+if not start_date or end_date:
+	test = start_date or end_date
+	print(test)

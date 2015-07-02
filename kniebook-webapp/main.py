@@ -17,9 +17,8 @@
 # limitations under the License.
 #
 
-import webapp2, jinja2
-import os, time, datetime
-import logging
+import webapp2, jinja2 #GoogleAppEngine modules
+import os, time, datetime, logging #standard python modules
 
 # Modul in dem saisonale Anpassungen an das Design vorbereitet werden
 import seasons
@@ -283,6 +282,7 @@ class TermineHandler(AppHandler):
 			
 
 	def create_new_date(self):
+		error = False
 		params = dict(start_date = self.request.get("start_date"),
 						end_date = self.request.get("end_date"),
 						title = self.request.get("title"),
@@ -294,10 +294,18 @@ class TermineHandler(AppHandler):
 						error_title = "",
 						error_concern = "")
 
-		if not params["start_date"]:
-			params["error_start_date"] = "Es muss ein Datum festgelegt werden."
-		else:
-			params["start_date"] = datetime.datetime.strptime(params["start_date"],"%Y-%m-%d").date()
+		'''
+		Macht es hier Sinn eine Kontrollschleife festzulegen die nach
+		jedem Kontrollschritt prueft ob ein Fehler vorliegt und dann
+		evtl fruhezeitig abbricht und die Seite erneut mit der Fehlermeldung
+		rendert? Das koennte zumindest dazu fuehren, dass weniger Rechenarbeit
+		notwendig ist. Andererseits kann dann nicht auf einmal angezeigt werden,
+		ob mehrere Fehler bei der Eingabe vorlagen. Das sollte wohl ohnehin
+		mit so etwas wie AJAX schon waehrend der Eingabe geprueft werden
+		'''
+
+		error, params = databases.Calendar.valid_dates(**params)
+		logging.info("Nach valid_dates hat Error den Wert: %s" % error)
 
 		if not params["title"]:
 			params["error_title"] = "Es muss ein Titel eingegeben werden."
@@ -311,7 +319,8 @@ class TermineHandler(AppHandler):
 		if not params["concerned_users"]:
 			params["error_concern"] = "Es muss mindestens ein Betroffener markiert werden."
 
-		if params["error_start_date"] or params["error_title"] or params["error_concern"]:
+		# Das hier sollte noch verbessert werden...
+		if params["error_start_date"] or params["error_start_date"] or params["error_title"] or params["error_concern"]:
 			self.render("termine.html", dates=databases.Calendar.get_dates_ahead(), **params)
 		else:
 			databases.Calendar.input_date(**params)

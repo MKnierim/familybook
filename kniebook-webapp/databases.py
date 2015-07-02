@@ -2,8 +2,7 @@
 
 from google.appengine.ext import db
 
-import datetime
-import re
+import datetime, re, logging
 
 import security
 
@@ -110,7 +109,6 @@ class User(db.Model):
 			#Trage alle Geburtstage in Kalender ein
 			birthday_date = entry[2].replace(year=datetime.date.today().year)
 			new_date = Calendar(start_date = birthday_date,
-								end_date = birthday_date,
 								title = entry[0]+" "+str(datetime.date.today().year-entry[2].year)+". Geburtstag",
 								author = new_user,
 								concerned_users = [entry[0]])
@@ -144,12 +142,55 @@ class User(db.Model):
 
 class Calendar(db.Model):
 	start_date = db.DateProperty(required=True)
-	end_date = db.DateProperty() #set validation method here?
+	end_date = db.DateProperty(default=None)
 	title = db.StringProperty(required=True)
 	description = db.TextProperty()
 	author = db.ReferenceProperty()
 	concerned_users = db.ListProperty(str)
 	created = db.DateProperty(auto_now_add=True)
+
+	@staticmethod
+	def valid_dates(**kw):
+		# Diese Funktion wird aufgerufen wenn nur das Startdatum gesetzt werden soll
+		def set_start():
+			logging.info("Programm kommt bei set_start an")
+			kw["start_date"] = kw["start_date"] or kw["end_date"]
+			kw["end_date"] = None
+
+		# Prueft ob ueberhaupt ein Datum angegeben wurde
+		if not kw["start_date"] or kw["end_date"]:
+			kw["error_start_date"] = "Es wurde kein Datum angegeben."
+			logging.info("valid_dates kommt bei erstem if an - Keine Datumseingabe")
+			return True, kw
+
+		# Prueft ob nur ein, aber keine zwei Daten angegeben wurden
+		elif not kw["start_date"] and kw["end_date"]:
+			logging.info("valid_dates kommt bei zweitem if an - Ein Datum wurde eingegeben")
+			# Falls nur ein Datum eingegeben wird, so wird dieses als start_date gesetzt
+			set_start()
+
+			kw["start_date"] = datetime.datetime.strptime(kw["start_date"],"%Y-%m-%d").date()
+			return False, kw
+
+		# Wenn beide Daten angegeben wurden, so werden diese auf Richtigkeit geprueft und umgewandelt
+		else:
+			# Konvertierung der Eingaben fuer folgenden Vergleich
+			kw["start_date"] = datetime.datetime.strptime(kw["start_date"],"%Y-%m-%d").date()
+			kw["end_date"] = datetime.datetime.strptime(kw["end_date"],"%Y-%m-%d").date()
+
+			# Prueft ob beide Daten gleich sind
+			if kw["start_date"] == kw["end_date"]:
+				set_start()
+				return False, kw
+
+			# Prueft ob das Enddatum hinter dem Startdatum liegt
+			elif kw["start_date"] > kw["end_date"]: # Muss ich hier in Datetime.date umwandeln um zu vergleichen?
+				kw["error_end_date"] = "Das Enddatum darf nicht vor dem Startdatum liegen."
+				return True, kw
+
+			# Sonst sind ja beide Daten richtig eingegeben worden und koennen zurueck gegeben werden
+			else:
+				return False, kw
 
 	@classmethod
 	def input_date(cls, **kw):
