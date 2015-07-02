@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+	<div class="row">
+		<div class="col-md-12">
+			<hr>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h4>{{ post.title }}</h4>
+			<small>{{ post.start_date.strftime("%d.%m.%Y") }}</small>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<div class="space-bottom"><b>Betrifft</b></div>
+			{% for entry in post.concerned_users %}
+				{# <img src="/images/avatare/{{ post.get_concerned_avatar(entry) }}"> #}
+				<svg height="43" width="43"><circle cx="20" cy="20" r="20" class="{{ entry.lower() }}"></svg>
+			{% endfor %}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			{% if post.description %}
+				{{ post.description }}
+			{% else %}
+				<small>Es wurde für diesen Termin keine nähere Beschreibung eingetragen.</small>
+			{% endif %}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<a href="/termine" class="btn btn-default">Zurück</a>
+		</div>
+	</div>
+{% endblock %}

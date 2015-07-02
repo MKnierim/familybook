@@ -80,11 +80,11 @@
 			</form>
 		</div>
 		<div class="col-md-6 text-center">
-			<h5>Registration</h5>
+			<h5>Registrierung</h5>
 			<form method="post">
-				<input type="text" name="n_nutzer" placeholder="Neuer Nutzer" value="{{n_nutzer}}" class="form-control">
+				<input type="text" name="n_nutzer" placeholder="Neuer Nutzer" value="{{n_nutzer}}" class="form-control" disabled>
 				<div class="error">{{error_username}}</div>
-				<input type="password" name="n_pw" placeholder="Passwort" class="form-control">
+				<input type="password" name="n_pw" placeholder="Passwort" class="form-control" disabled>
 				<div class="error">{{error_pw}}</div>
 				<button type="submit" value="on" name="create_new_user" class="btn btn-default" disabled>Anlegen</button>
 			</form>

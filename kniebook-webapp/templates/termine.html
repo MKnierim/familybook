@@ -46,7 +46,7 @@
 									{% if entry.end_date %} - {{entry.end_date.strftime("%d.%m.%Y")}}{% endif %}
 								</dd>
 								<dt>Titel:</dt>
-								<dd>{{entry.title}}</dd>
+								<dd><a href="/termin/{{ entry.key().id() }}">{{entry.title}}</a></dd>
 								{% if entry.description %}
 								<dt>Beschreibung:</dt>
 								<dd>{{entry.description}}</dd>
@@ -156,5 +156,5 @@
 			</form>
 		</div>
 	</div>
-	
+
 {% endblock %}

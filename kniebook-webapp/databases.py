@@ -22,6 +22,13 @@ def delete_all_entries(database):
 		if not (database==User and entry.username=="Admin"):
 			entry.delete()
 
+# Makes User.by_id redundant, finalize refactoring
+def get_db_entity(entity_cls, entity_id):
+	# key = db.Key.from_path(entity_cls, entity_id)
+	# key = entity_cls.get_by_id(entity_id)
+	# return db.get(key)
+	return entity_cls.get_by_id(int(entity_id))		# Conversion to int is necessary because usually a string is passed
+
 # def get_new_activities(user, last_visit):
 # 	activities = []
 # 	new_dates = Calendar.all().filter("created <=", datetime.date.today()).filter("created >=", last_visit).order("created").fetch(limit=None)
@@ -56,6 +63,7 @@ class User(db.Model):
 	def valid_email(email):
 		return email and EMAIL_RE.match(email)
 
+	# With the implementation of get_db_entity() this function becomes redundant. Delete
 	@classmethod
 	def by_id(cls, nutzer_id):
 		return cls.get_by_id(nutzer_id)
@@ -116,7 +124,7 @@ class User(db.Model):
 
 	@classmethod
 	def create_admin(cls):
-		new_admin = cls(username = "Admin", 
+		new_admin = cls(username = "Admin",
 						# password = "admin",
 						password_hash = security.make_pw_hash("admin"),
 						geburtsdatum=datetime.date.today(),
@@ -126,7 +134,7 @@ class User(db.Model):
 
 	@classmethod
 	def create_guest(cls):
-		new_guest = cls(username = "Gast", 
+		new_guest = cls(username = "Gast",
 						# password = "gast",
 						password_hash = security.make_pw_hash("gast"),
 						geburtsdatum=datetime.date.today(),
@@ -217,16 +225,19 @@ class Calendar(db.Model):
 	def get_dates_before(cls, limit=None):
 		return cls.all().filter("start_date <", datetime.date.today()).order("-start_date").fetch(limit)
 
-class Post(db.Model):
-	title = db.StringProperty(required=True)
-	content = db.TextProperty(required=True)
-	author = db.ReferenceProperty()
-	created = db.DateProperty(auto_now_add=True)
-	last_modified = db.DateTimeProperty(auto_now=True)
-	images = db.ListProperty(str)
+	def get_concerned_avatar(self, username):
+		concerned_user = User.by_name(username)
+		return concerned_user.avatar
 
-	# Hier bin ich mir nicht ganz sicher, ob das wirklich notwendig ist
-	@classmethod
-	def render(self):
-		self._render_text = self.content.replace('\n', '<br>')
-		return render_str("post.html", p = self)
+# class Post(db.Model):
+# 	title = db.StringProperty(required=True)
+# 	content = db.TextProperty(required=True)
+# 	author = db.ReferenceProperty()
+# 	created = db.DateProperty(auto_now_add=True)
+# 	last_modified = db.DateTimeProperty(auto_now=True)
+# 	images = db.ListProperty(str)
+
+# 	# Hier bin ich mir nicht ganz sicher, ob das wirklich notwendig ist
+# 	def render(self):
+# 		self._render_text = self.content.replace('\n', '<br>')
+# 		return render_str("post.html", p = self)

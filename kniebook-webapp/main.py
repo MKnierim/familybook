@@ -75,9 +75,9 @@ class AppHandler(webapp2.RequestHandler):
 
 		#Ueberpruefung ob die Seite gerendert werden soll wenn Nutzer nicht angemeldet ist
 		if not self.nutzer and template != "front.html": #and template != "back.html"
-			handle_401()
+			handle_401()		# Does not work like this because no arguments are passed
 		else:
-			self.response.write(template_render(template, **kw))	
+			self.response.write(template_render(template, **kw))
 
 	def set_secure_cookie(self, name, val, expires):
 		cookie_val = security.make_hash(val)
@@ -218,7 +218,7 @@ class SettingsHandler(AppHandler):
 		if choice in design_choices:
 			self.nutzer.ui_color = choice
 			self.nutzer.put()
-		
+
 		self.redirect("/settings")
 
 	def change_pw(self):
@@ -279,7 +279,7 @@ class TermineHandler(AppHandler):
 			self.create_new_date()
 		elif btn_delete_date:
 			self.delete_date(btn_delete_date)
-			
+
 
 	def create_new_date(self):
 		error = False
@@ -348,15 +348,25 @@ class TermineArchivHandler(AppHandler):
 		time.sleep(.2)
 		self.redirect("/termine/archiv")
 
-class BlogHandler(AppHandler):
-	def get(self):
-		params = dict(posts = databases.list_entries(databases.Post,"-created",5))
-		self.render("blog.html", **params)
-
-class BlogPostHandler(AppHandler):
+class TerminPostHandler(AppHandler):
 	def get(self, post_id): #post_id is delivered through the re pattern defined in the WSGIApplication routing
-		# params[post] = post_id
-		self.response.write(post_id)
+		post = databases.get_db_entity(databases.Calendar, post_id)
+
+		if not post:
+			self.error(404)		# Is not connected to error handling
+			# handle_404() # Does not work like this because no arguments are passed
+		else:
+			self.render("termin_post.html", post = post)
+
+# class BlogHandler(AppHandler):
+# 	def get(self):
+# 		params = dict(posts = databases.list_entries(databases.Post,"-created",5))
+# 		self.render("blog.html", **params)
+
+# class BlogPostHandler(AppHandler):
+# 	def get(self, post_id): #post_id is delivered through the re pattern defined in the WSGIApplication routing
+# 		# params[post] = post_id
+# 		self.response.write(post_id)
 
 # class ForumHandler(AppHandler):
 # 	def get(self):
@@ -373,9 +383,10 @@ app = webapp2.WSGIApplication([
 	(r"/main", MainHandler),
 	(r"/settings", SettingsHandler),
 	(r"/termine", TermineHandler),
+	(r"/termin/(\d+)", TerminPostHandler), # \(d+) is a regular expression for digits
 	(r"/termine/archiv", TermineArchivHandler),
-	(r"/blog", BlogHandler),
-	(r"/blog/(\d+)", BlogPostHandler), # \(d+) is a regular expression for digits
+	# (r"/blog", BlogHandler),
+	# (r"/blog/(\d+)", BlogPostHandler), # \(d+) is a regular expression for digits
 	# (r"/forum", ForumHandler),
 	(r"/logout", LogoutHandler)
 ], debug=True)

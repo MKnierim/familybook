@@ -42,7 +42,7 @@
 								<dt>Datum:</dt>
 								<dd>{{entry.start_date.strftime("%d.%m.%Y")}}</dd>
 								<dt>Titel:</dt>
-								<dd>{{entry.title}}</dd>
+								<dd><a href="/termin/{{ entry.key().id() }}">{{entry.title}}</a></dd>
 								{% if entry.description %}
 								<dt>Beschreibung:</dt>
 								<dd>{{entry.description}}</dd>
@@ -90,11 +90,11 @@
 				<div class="text-center"><small>Es wurden keine Termine in der Vergangenheit gefunden.</small></div>
 			{% endif %}
 		</div>
-	</div>	
+	</div>
 	<div class="row">
 		<div class="col-md-12 text-center">
 			<a href="/termine" class="btn btn-default">Zurück</a>
 		</div>
 	</div>
-	
+
 {% endblock %}

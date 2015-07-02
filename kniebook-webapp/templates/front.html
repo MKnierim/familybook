@@ -32,19 +32,19 @@
 	</div>
 
 	{% if nutzer %}
-	<div class="row">
-		<div class="col-md-12 text-center">
-			<a href="/main" class="btn btn-season">Aktuelles</a>
-			<a href="/termine" class="btn btn-season">Termine</a>
-			<!-- <a href="/forum" class="btn btn-season">Forum</a> -->
-			<a href="/blog" class="btn btn-season">Blog</a>
-			<a href="/settings" class="btn btn-season">Einstellungen</a>
-			{% if nutzer.username == "Admin" %}		
-			<a href="/back" class="btn btn-season">Back-end</a>
-			{% endif %}
-			<a href="/logout" class="btn btn-season">Abmelden</a>
+		<div class="row">
+			<div class="col-md-12 text-center">
+				<a href="/main" class="btn btn-season">Aktuelles</a>
+				<a href="/termine" class="btn btn-season">Termine</a>
+				<!-- <a href="/forum" class="btn btn-season">Forum</a> -->
+				<!-- <a href="/blog" class="btn btn-season">Blog</a> -->
+				<a href="/settings" class="btn btn-season">Einstellungen</a>
+				{% if nutzer.username == "Admin" %}		
+				<a href="/back" class="btn btn-season">Back-end</a>
+				{% endif %}
+				<a href="/logout" class="btn btn-season">Abmelden</a>
+			</div>
 		</div>
-	</div>
 	{% else %}
 	<div class="row">
 		<div class="col-md-4"></div>
