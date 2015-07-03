@@ -67,7 +67,7 @@
 								{% if "Thomas" in entry.concerned_users %}
 									<svg height="40" width="40"><circle cx="20" cy="20" r="20" class="thomas"></svg>
 								{% endif %}
-							</td>	
+							</td>
 							<td class="text-center">
 								{% if "David" in entry.concerned_users or "Franzi" in entry.concerned_users %}
 									<svg height="40" width="40"><circle cx="20" cy="20" r="20" class="david"></svg>
@@ -118,8 +118,8 @@
 					<div class="error">{{error_start_date}}</div>
 				</div>
 				<div class="form-group">
-					<label>Bis*</label>
-					<input type="date" name="end_date" value="{{end_date}}" class="form-control text-right" disabled>
+					<label>Bis</label>
+					<input type="date" name="end_date" value="{{end_date}}" class="form-control text-right">
 					<div class="error">{{error_end_date}}</div>
 				</div>
 				<div class="form-group">
@@ -152,7 +152,7 @@
 					</div>
 					<div class="error">{{error_concern}}</div>
 				</div>
-				<button type="submit" name="create_new_date" value="on" class="btn btn-default">Eintragen</button>
+				<button type="submit" name="edit_date" value="on" class="btn btn-default">Eintragen</button>
 			</form>
 		</div>
 	</div>

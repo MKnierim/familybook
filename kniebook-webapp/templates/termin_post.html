@@ -35,4 +35,65 @@
 			<a href="/termine" class="btn btn-default">Zurück</a>
 		</div>
 	</div>
+	{% if nutzer.username == "Admin" or nutzer.username == post.author.username %}
+	<div class="row">
+		<div class="col-md-12">
+			<hr>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h4>Termin bearbeiten</h4>
+			<small>Felder mit Asterisk (*) müssen ausgefüllt werden.</small>
+		</div>
+	</div>
+		<div class="row">
+		<div class="col-md-12 text-center">
+			<form method="post">
+				<div class="form-group">
+					<label>Von*</label>
+					<input type="date" name="start_date" value="{{post.start_date}}" class="form-control text-right">
+					<div class="error">{{error_start_date}}</div>
+				</div>
+				<div class="form-group">
+					<label>Bis*</label>
+					<input type="date" name="end_date" value="{{post.end_date}}" class="form-control text-right">
+					<div class="error">{{error_end_date}}</div>
+				</div>
+				<div class="form-group">
+					<label>Titel*</label>
+					<input type="text" name="title" value="{{post.title}}" class="form-control">
+					<div class="error">{{error_title}}</div>
+				</div>
+				<div class="form-group">
+					<label>Beschreibung</label>
+					<textarea name="description" value="{{post.description}}" class="form-control" rows="6"></textarea>
+				</div>
+				<div class="form-group">
+					<label>Betrifft*</label>
+					<div>
+						<label class="concern-cb">
+							<img src="/images/avatare/bk-reg.jpg" class="avatar-small img-circle"><input type="checkbox" name="concern_beate" value="Beate" {% if "Beate" in post.concerned_users %}checked{% endif %}>
+						</label>
+						<label class="concern-cb">
+							<img src="/images/avatare/tk-reg.jpg" class="avatar-small img-circle"><input type="checkbox" name="concern_thomas" value="Thomas" {% if "Thomas" in post.concerned_users %}checked{% endif %}>
+						</label>
+						<label class="concern-cb">
+							<img src="/images/avatare/dk-reg.jpg" class="avatar-small img-circle"><input type="checkbox" name="concern_david" value="David" {% if "David" in post.concerned_users or "Franzi" in post.concerned_users %}checked{% endif %}>
+						</label>
+						<label class="concern-cb">
+							<img src="/images/avatare/mk1-reg.jpg" class="avatar-small img-circle"><input type="checkbox" name="concern_michael" value="Michael" {% if "Michael" in post.concerned_users %}checked{% endif %}>
+						</label>
+						<label class="concern-cb">
+							<img src="/images/avatare/mk2-reg.jpg" class="avatar-small img-circle"><input type="checkbox" name="concern_matthias" value="Matthias" {% if "Matthias" in post.concerned_users %}checked{% endif %}>
+						</label>
+					</div>
+					<div class="error">{{error_concern}}</div>
+				</div>
+				<button type="submit" name="edit_date" value="on" class="btn btn-default">Ändern</button><br>
+				<button type="submit" name="delete_date" value="{{post.key().id()}}" class="btn btn-default">Löschen</button>
+			</form>
+		</div>
+	</div>
+	{% endif %}
 {% endblock %}

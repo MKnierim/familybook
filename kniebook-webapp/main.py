@@ -275,17 +275,19 @@ class TermineHandler(AppHandler):
 		self.render("termine.html", **params)
 
 	def post(self):
-		create_new_date = self.request.get("create_new_date")
+		btn_edit_date = self.request.get("edit_date")
 		btn_delete_date = self.request.get("delete_date")
 
-		if create_new_date:
-			self.create_new_date()
+		if btn_edit_date:
+			self.edit_date()
 		elif btn_delete_date:
 			self.delete_date(btn_delete_date)
 
 
-	def create_new_date(self):
+	def edit_date(self):
 		error = False
+		logging.info("edit_date is executed()")
+		# Get all input from form elements and set up error messages
 		params = dict(start_date = self.request.get("start_date"),
 						end_date = self.request.get("end_date"),
 						title = self.request.get("title"),
@@ -297,33 +299,19 @@ class TermineHandler(AppHandler):
 						error_title = "",
 						error_concern = "")
 
-		'''
-		Macht es hier Sinn eine Kontrollschleife festzulegen die nach
-		jedem Kontrollschritt prueft ob ein Fehler vorliegt und dann
-		evtl fruhezeitig abbricht und die Seite erneut mit der Fehlermeldung
-		rendert? Das koennte zumindest dazu fuehren, dass weniger Rechenarbeit
-		notwendig ist. Andererseits kann dann nicht auf einmal angezeigt werden,
-		ob mehrere Fehler bei der Eingabe vorlagen. Das sollte wohl ohnehin
-		mit so etwas wie AJAX schon waehrend der Eingabe geprueft werden
-		'''
-
-		error, params = databases.Calendar.valid_dates(**params)
-		logging.info("Nach valid_dates hat Error den Wert: %s" % error)
-
-		if not params["title"]:
-			params["error_title"] = "Es muss ein Titel eingegeben werden."
-
 		# Check if concerns have been assigned and return a list of concerned users or an error message
 		for entry in ["concern_beate", "concern_thomas", "concern_david", "concern_michael", "concern_matthias"]:
 			check = self.request.get(entry)
 			if check:
 				params["concerned_users"].append(str(check))
 
-		if not params["concerned_users"]:
-			params["error_concern"] = "Es muss mindestens ein Betroffener markiert werden."
+		# Check for date validity and return updated params
+		error, params = databases.Calendar.valid_dates(**params)
+		# Check for validity of all other inputs and return updated params
+		error, params = databases.Calendar.valid_input(**params)
 
-		# Das hier sollte noch verbessert werden...
-		if params["error_start_date"] or params["error_start_date"] or params["error_title"] or params["error_concern"]:
+		# Execute date editing or return with error messages
+		if error:
 			self.render("termine.html", dates=databases.Calendar.get_dates_ahead(), **params)
 		else:
 			databases.Calendar.input_date(**params)
@@ -351,7 +339,7 @@ class TermineArchivHandler(AppHandler):
 		time.sleep(.2)
 		self.redirect("/termine/archiv")
 
-class TerminPostHandler(AppHandler):
+class TerminPostHandler(TermineHandler):		# Watch out, here a different class is inherited
 	def get(self, post_id): #post_id is delivered through the re pattern defined in the WSGIApplication routing
 		post = databases.get_db_entity(databases.Calendar, post_id)
 
@@ -359,6 +347,15 @@ class TerminPostHandler(AppHandler):
 			abort(404)
 		else:
 			self.render("termin_post.html", post = post)
+
+	def post(self, post_id):		# The post_id needs to be passed here. Seems to be due to automatic passing of RE pattern in the WSGIApplication routing
+		btn_edit_date = self.request.get("edit_date")
+		btn_delete_date = self.request.get("delete_date")
+
+		if btn_edit_date:
+			self.edit_date()
+		elif btn_delete_date:
+			self.delete_date(btn_delete_date)
 
 # class BlogHandler(AppHandler):
 # 	def get(self):

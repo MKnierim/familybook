@@ -1020,7 +1020,8 @@ body .markdown-body
 <h2 id="feature-list"><a name="user-content-feature-list" href="#feature-list" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Feature List</h2>
 <h3 id="critical-functionality"><a name="user-content-critical-functionality" href="#critical-functionality" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Critical functionality</h3>
 <ul>
-<li>&hellip;</li>
+<li>User database with functionality for each user to personalize change password, email and design</li>
+<li>Calendar database and event construction/editing for users</li>
 </ul>
 <h3 id="additional-functionality"><a name="user-content-additional-functionality" href="#additional-functionality" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Additional functionality</h3>
 <ul>
@@ -1030,10 +1031,11 @@ body .markdown-body
 </ul>
 <h2 id="to-do"><a name="user-content-to-do" href="#to-do" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>To Do</h2>
 <ul>
-<li>Finish date span implementation</li>
-<li>Implement date/event editing feature</li>
 <li>Implement independent blogging function</li>
-<li>Implement general error handling function, not just specific to 401,404, 500. <a href="http://webapp-improved.appspot.com/guide/exceptions.html#guide-exceptions">Documentation</a></li>
+<li>Implement general error handling function, not just specific to 401,404, 500. <a href="http://webapp-improved.appspot.com/guide/exceptions.html#guide-exceptions">See Documentation</a></li>
 <li>Refactor Code in smaller modules to facilitate reuse in later projects</li>
 </ul>
-<h2 id="known-bugs"><a name="user-content-known-bugs" href="#known-bugs" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Known Bugs</h2></article></body></html>
+<h2 id="known-bugs"><a name="user-content-known-bugs" href="#known-bugs" class="headeranchor-link" aria-hidden="true"><span class="headeranchor"></span></a>Known Bugs</h2>
+<ul>
+<li>Editing an event creates a new copy of the event rather than updating the observed event. Other than that, the algorithm edit_date() should work just fine for creating as well as editing an event.</li>
+</ul></article></body></html>

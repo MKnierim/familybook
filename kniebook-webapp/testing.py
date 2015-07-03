@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
-test = "Hans mag Wurst"
+a = True
+b = True
+c = False
+d = False
 
-print test.lower()
+print not (a or b)
