@@ -75,7 +75,9 @@ class AppHandler(webapp2.RequestHandler):
 
 		#Ueberpruefung ob die Seite gerendert werden soll wenn Nutzer nicht angemeldet ist
 		if not self.nutzer and template != "front.html": #and template != "back.html"
-			handle_401()		# Does not work like this because no arguments are passed
+			self.abort(401)
+
+			# self.redirect("/")
 		else:
 			self.response.write(template_render(template, **kw))
 
@@ -118,13 +120,14 @@ class FrontHandler(AppHandler):
 
 class BackHandler(AppHandler):
 	def get(self):
-		#Pruefe ob ein Admin angelegt ist, wenn nicht, dann lege an
+		# Check for admin user instance. If none is found, instantiate admin.
+		# This is the way to initialize the admin user on the localhost-app-instance
 		admin = databases.User.by_name("Admin")
 		if not admin:
 			databases.User.create_admin()
 			self.redirect("/")
-
-		self.render("back.html", users=databases.list_entries(databases.User,"geburtsdatum"))
+		else:		# Careful here. If it is later decided to remove the admin User instance, the /back page becomes inaccesible for all users.
+			self.render("back.html", users=databases.list_entries(databases.User,"geburtsdatum"))
 
 	def post(self):
 		initialize_users = self.request.get("btn-initialize-users")
@@ -230,7 +233,7 @@ class SettingsHandler(AppHandler):
 
 		if not security.validate_pw(params["old_pw"], self.nutzer.password_hash):
 			params["error_pw"] = "Das alte Passwort war falsch."
-			error = True 
+			error = True
 		elif not databases.User.valid_password(params["new_pw"]):
 			params["error_pw"] = "Das ist kein gueltiges neues Passwort."
 			error = True
@@ -353,8 +356,7 @@ class TerminPostHandler(AppHandler):
 		post = databases.get_db_entity(databases.Calendar, post_id)
 
 		if not post:
-			self.error(404)		# Is not connected to error handling
-			# handle_404() # Does not work like this because no arguments are passed
+			abort(404)
 		else:
 			self.render("termin_post.html", post = post)
 

@@ -126,7 +126,7 @@ class User(db.Model):
 	def create_admin(cls):
 		new_admin = cls(username = "Admin",
 						# password = "admin",
-						password_hash = security.make_pw_hash("admin"),
+						password_hash = security.make_pw_hash("HansmagWurst"),
 						geburtsdatum=datetime.date.today(),
 						email="michael@kniebook.de",
 						avatar="admin-reg.jpg")
