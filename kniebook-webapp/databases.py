@@ -156,69 +156,94 @@ class Calendar(db.Model):
 	author = db.ReferenceProperty()
 	concerned_users = db.ListProperty(str)
 	created = db.DateProperty(auto_now_add=True)
+	last_modified = db.DateTimeProperty(auto_now=True)
 
 	@staticmethod
-	def valid_dates(**kw):
+	def valid_dates(**params):
 		# Call when only start_date should be set
 		def set_start():
-			kw["start_date"] = kw["start_date"] or kw["end_date"]
-			kw["end_date"] = None
+			params["start_date"] = params["start_date"] or params["end_date"]
+			params["end_date"] = None
 
 		# Check if no dates were entered by the user
-		if not (kw["start_date"] or kw["end_date"]):
-			kw["error_start_date"] = "Es wurde kein Datum angegeben."
-			return True, kw
+		if not (params["start_date"] or params["end_date"]):
+			params["error_start_date"] = "Es wurde kein Datum angegeben."
+			return True, params
 
 		# Check if one, but not two dates were entered by the user
-		elif not (kw["start_date"] and kw["end_date"]):
+		elif not (params["start_date"] and params["end_date"]):
 			set_start()		# In case of just one given date parameter, only the start_date attribute is set
 
-			kw["start_date"] = datetime.datetime.strptime(kw["start_date"],"%Y-%m-%d").date()
-			return False, kw
+			params["start_date"] = datetime.datetime.strptime(params["start_date"],"%Y-%m-%d").date()
+			return False, params
 
 		# If two date parameters are entered they are checked for validity and converted
 		else:
 			# Type conversion for following comparison
-			kw["start_date"] = datetime.datetime.strptime(kw["start_date"],"%Y-%m-%d").date()
-			kw["end_date"] = datetime.datetime.strptime(kw["end_date"],"%Y-%m-%d").date()
+			params["start_date"] = datetime.datetime.strptime(params["start_date"],"%Y-%m-%d").date()
+			params["end_date"] = datetime.datetime.strptime(params["end_date"],"%Y-%m-%d").date()
 
 			# Check if both dates are equal
-			if kw["start_date"] == kw["end_date"]:
+			if params["start_date"] == params["end_date"]:
 				set_start()
-				return False, kw
+				return False, params
 
 			# Check if end_date is later than start_date
-			elif kw["start_date"] > kw["end_date"]:
-				kw["error_end_date"] = "Das Enddatum darf nicht vor dem Startdatum liegen."
-				return True, kw
+			elif params["start_date"] > params["end_date"]:
+				params["error_end_date"] = "Das Enddatum darf nicht vor dem Startdatum liegen."
+				return True, params
 
 			# Otherwise both dates are valid and can be returned
-			return False, kw
+			return False, params
 
 	@staticmethod
-	def valid_input(**kw):
+	def valid_input(**params):
 		error = False
 
-		if not kw["title"]:
-			kw["error_title"] = "Es muss ein Titel eingegeben werden."
+		if not params["title"]:
+			params["error_title"] = "Es muss ein Titel eingegeben werden."
 			error = True
 
-		if not kw["concerned_users"]:
-			kw["error_concern"] = "Es muss mindestens ein Betroffener markiert werden."
+		if not params["concerned_users"]:
+			params["error_concern"] = "Es muss mindestens ein Betroffener markiert werden."
 			error = True
 
-		return error, kw
+		return error, params
 
-	@classmethod
-	def input_date(cls, **kw):
-		new_date = cls(start_date = kw["start_date"],
-						end_date = kw["end_date"],
-						title = kw["title"],
-						description = kw["description"],
-						author = kw["author"],
-						concerned_users = kw["concerned_users"])
+	# Base function to capture event data. Can be used by decorators
+	@staticmethod
+	def get_event_data():
+		pass
 
-		new_date.put()
+	# Make this a decorator function for get_event_data()
+	@staticmethod
+	def update_date(date_id, **params):
+		entry = Calendar.get_by_id(int(date_id))
+
+		# This needs to be optimized badly
+		if entry:
+			entry.start_date = params["start_date"]
+			entry.end_date = params["end_date"]
+			entry.title = params["title"]
+			entry.description = params["description"]
+			entry.concerned_users = params["concerned_users"]
+
+			entry.put()
+
+	# Make this a decorator function for get_event_data()
+	@staticmethod
+	def input_date(date=None, **params):
+		if date:
+			Calendar.update_date(date, **params)
+		else:
+			new_date = Calendar(start_date = params["start_date"],
+							end_date = params["end_date"],
+							title = params["title"],
+							description = params["description"],
+							author = params["author"],
+							concerned_users = params["concerned_users"])
+
+			new_date.put()
 
 	@classmethod
 	def get_current_week(cls):

@@ -199,6 +199,13 @@ class MainHandler(AppHandler):
 
 		self.render("main.html", **params)
 
+	def post(self):
+		btn_delete_date = self.request.get("delete_date")
+
+		if btn_delete_date:
+			TermineHandler.delete_date(self, btn_delete_date)
+			self.redirect("/main")
+
 class SettingsHandler(AppHandler):
 	def get(self):
 		self.render("settings.html")
@@ -280,13 +287,13 @@ class TermineHandler(AppHandler):
 
 		if btn_edit_date:
 			self.edit_date()
+			self.redirect("/termine")
 		elif btn_delete_date:
-			self.delete_date(btn_delete_date)
+			self.delete_date(self, btn_delete_date)
+			self.redirect("/termine")
 
-
-	def edit_date(self):
+	def edit_date(self, post=None, post_id=None):
 		error = False
-		logging.info("edit_date is executed()")
 		# Get all input from form elements and set up error messages
 		params = dict(start_date = self.request.get("start_date"),
 						end_date = self.request.get("end_date"),
@@ -312,18 +319,22 @@ class TermineHandler(AppHandler):
 
 		# Execute date editing or return with error messages
 		if error:
-			self.render("termine.html", dates=databases.Calendar.get_dates_ahead(), **params)
+			# Check for which page to return to with error messages
+			if post_id:
+				self.render("termin_post.html", post = post, **params)
+				# self.redirect("/termin/%s" % post_id)
+			else:
+				self.render("termine.html", dates=databases.Calendar.get_dates_ahead(), **params)
 		else:
-			databases.Calendar.input_date(**params)
+			databases.Calendar.input_date(post_id, **params)
 			time.sleep(.1)
-			self.redirect("/termine")
 
-	def delete_date(self, key):
+	@staticmethod
+	def delete_date(self, key):		# If have to check here if the default argument for self is acceptable
 		databases.Calendar.get_by_id(int(key)).delete()
 		time.sleep(.2)
-		self.redirect("/termine")
 
-class TermineArchivHandler(AppHandler):
+class TermineArchivHandler(TermineHandler):		# Watch out, here a different class is inherited
 	def get(self):
 		params = dict(old_dates=databases.Calendar.get_dates_before())
 		self.render("termine_archiv.html", **params)
@@ -332,12 +343,8 @@ class TermineArchivHandler(AppHandler):
 		btn_delete_date = self.request.get("delete_date")
 
 		if btn_delete_date:
-			self.delete_date(btn_delete_date)
-
-	def delete_date(self, key):
-		databases.Calendar.get_by_id(int(key)).delete()
-		time.sleep(.2)
-		self.redirect("/termine/archiv")
+			self.delete_date(self, btn_delete_date)
+			self.redirect("/termine/archiv")
 
 class TerminPostHandler(TermineHandler):		# Watch out, here a different class is inherited
 	def get(self, post_id): #post_id is delivered through the re pattern defined in the WSGIApplication routing
@@ -353,9 +360,12 @@ class TerminPostHandler(TermineHandler):		# Watch out, here a different class is
 		btn_delete_date = self.request.get("delete_date")
 
 		if btn_edit_date:
-			self.edit_date()
+			post = databases.get_db_entity(databases.Calendar, post_id)
+			self.edit_date(post, post_id)		# Function call differs here to new event creation. Pass post_id for identification.
+			self.redirect("/termine")
 		elif btn_delete_date:
 			self.delete_date(btn_delete_date)
+			self.redirect("/termine")
 
 # class BlogHandler(AppHandler):
 # 	def get(self):
