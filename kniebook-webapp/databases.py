@@ -47,6 +47,7 @@ class User(db.Model):
 	geburtsdatum = db.DateProperty()
 	email = db.StringProperty()
 	avatar = db.StringProperty(default="guest-reg.jpg")
+	avatar_blob = db.BlobProperty ()		# Test to upload an image by the user
 	cal_color = db.StringProperty()
 	ui_color = db.StringProperty(default="auto", choices=["winter", "fruehling", "sommer", "herbst", "auto"])
 	last_visit = db.DateProperty(default=datetime.date(2015,1,1))
