@@ -1,0 +1,113 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Kniebook Testing - No script</title>
+	<link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="../static/css/main.css">
+	<style type="text/css">
+		* {
+		  -webkit-box-sizing:border-box;
+		  -moz-box-sizing:border-box;
+		  -o-box-sizing:border-box;
+		  -ms-box-sizing:border-box;
+		  box-sizing:border-box;
+		}
+
+		.date-row	{
+			width: 100%;
+			margin-bottom: 10px;
+			overflow: auto;
+		}
+
+		.date-title {
+			width: calc(100% - 200px);
+			float: left;
+			padding: 10px;
+		}
+
+		.date-date {
+			width: 100px;
+			float: right;
+			padding: 10px;
+		}
+
+		.date-description {
+			width: calc(100% - 60px);
+			float: left;
+			padding: 10px;
+		}
+
+		.date-controls {
+			width: 30px;
+			padding: 10px;
+			float: left;
+		}
+
+		.date-concern {
+			width: 100px;
+			float: right;
+			padding: 5px 10px;
+		}
+
+		.date-concern.short {
+			background-image: url("../images/ui/date-multiple-icon.png");
+			background-repeat: no-repeat;
+			background-position: 7px 5px;
+		}
+
+		.date-concern span {
+			margin-left: 25px;
+		}
+
+		#date-list {
+			margin: 0;
+			width: 100%;
+		}
+
+		#date-list h3 {
+			font-size: 14px;
+			font-weight: bold;
+		}
+
+		#date-list div {
+			border: 1px solid orange;
+		}
+
+		@media screen and (max-width: 480px) {
+			.date-title {
+				width: calc(100% - 100px);
+			}
+
+			.date-date {
+				float: left;
+				width: calc(100% - 60px);
+			}
+
+			.date-description {
+				display: none;
+			}
+		}
+
+	</style>
+
+</head>
+<body>
+	<!-- Container for dates -->
+	<div id="date-list">
+		<!-- Content row -->
+		<div class="date-row">
+			<div class="date-title">Titel Titel Titel Titel Titel Titel Titel Titel</div>
+			<div class="date-concern short">
+				<img src="http://placehold.it/30x30&text=1" class="img-circle">
+				<span>+X</span>
+				<!-- <img src="http://placehold.it/30x30&text=2"> -->
+			</div>
+			<div class="date-date">15.08.2015</div>
+			<div class="date-description">Kurzbeschreibung Kurzbeschreibung Kurzbeschreibung Kurzbeschreibung Kurzbeschreibung Kurzbeschreibung Kurz...</div>
+			<div class="date-controls">✎</div>
+			<div class="date-controls">✖</div>
+		</div>
+	</div>
+</body>
+</html>

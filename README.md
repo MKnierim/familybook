@@ -8,6 +8,9 @@ My personal facebook clone just for my family to communicate news and document f
 Feature List
 -------------------------
 
+### Main features
+* Date-List (responsive display of upcoming dates)
+
 ### Critical functionality
 * User database with functionality for each user to personalize change password, email and design
 * Calendar database and event construction/editing for users

@@ -1,11 +1,13 @@
-/* ------------------------------------ */
-/* Allgemeine Elemente */
-/* ------------------------------------ */
+/* ------------------------------------
+ * General elements
+ * ------------------------------------
+ */
 * {
-	/*-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	-ms-box-sizing: border-box;
-	box-sizing: border-box;*/
+	-webkit-box-sizing:border-box;
+  -moz-box-sizing:border-box;
+  -o-box-sizing:border-box;
+  -ms-box-sizing:border-box;
+  box-sizing:border-box;
 
 	/*border: 1px solid red !important;*/
 
@@ -47,9 +49,10 @@ a:hover {
 	text-decoration: none;
 }
 
-/* ------------------------------------ */
-/* Bootstrap Elemente */
-/* ------------------------------------ */
+/* ------------------------------------
+ * Bootstrap elements
+ * ------------------------------------
+ */
 .container {
 	max-width: 720px;
 	background-color: #fff;
@@ -59,8 +62,7 @@ a:hover {
 
 @media screen and (max-height: 800px) {
 	.container {
-		margin-top: 10px;
-		margin-bottom: 10px;
+		margin: 10px;
 	}
 }
 
@@ -94,9 +96,10 @@ a:hover {
 	width: 200px;
 }
 
-/* ------------------------------------ */
-/* Eigene Elemente */
-/* ------------------------------------ */
+/* ------------------------------------
+ * Own elements
+ * ------------------------------------
+ */
 .avatar-xs {
 	width: 30px;
 }
@@ -148,9 +151,89 @@ a:hover {
 	margin-left: 10px;
 }
 
-/* ------------------------------------ */
-/* Saisonale Stylings */
-/* ------------------------------------ */
+/* ------------------------------------
+ * Styling for date-list
+ * ------------------------------------
+ */
+.date-row	{
+	width: 100%;
+	margin-bottom: 10px;
+	overflow: auto;
+}
+
+.date-title {
+	width: calc(100% - 200px);
+	float: left;
+	padding: 10px;
+}
+
+.date-date {
+	width: 100px;
+	float: right;
+	padding: 10px;
+}
+
+.date-description {
+	width: calc(100% - 60px);
+	float: left;
+	padding: 10px;
+}
+
+.date-controls {
+	width: 30px;
+	padding: 10px;
+	float: left;
+}
+
+.date-concern {
+	width: 100px;
+	float: right;
+	padding: 5px 10px;
+}
+
+.date-concern.short {
+	background-image: url("/images/ui/date-multiple-icon.png");
+	background-repeat: no-repeat;
+	background-position: 7px 5px;
+}
+
+.date-concern span {
+	margin-left: 25px;
+}
+
+#date-list {
+	margin: 0;
+	width: 100%;
+}
+
+#date-list h3 {
+	font-size: 14px;
+	font-weight: bold;
+}
+
+#date-list div {
+	border: 1px solid orange;
+}
+
+@media screen and (max-width: 480px) {
+	.date-title {
+		width: calc(100% - 100px);
+	}
+
+	.date-date {
+		float: left;
+		width: calc(100% - 60px);
+	}
+
+	.date-description {
+		display: none;
+	}
+}
+
+/* ------------------------------------
+ * Seasonal stylings
+ * ------------------------------------
+ */
 .btn-winter {
 	color: #fff;
 	background-color: #294273;
@@ -195,10 +278,10 @@ a:hover {
 	color: #732817;
 }
 
-/* ------------------------------------ */
-/* User Stylings */
-/* ------------------------------------ */
-
+/* ------------------------------------
+ * User stylings
+ * ------------------------------------
+ */
 .beate {
 	color: #fff;
 	background-color: #F2E14C;
