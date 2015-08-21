@@ -20,16 +20,28 @@
 					<!-- Not implemented -->
 
 					{% for entry in dates %}
-						<!-- Date row -->
+						<!-- Single date row -->
 						<div class="date-row">
 							<div class="date-title">
 								<a href="/termin/{{ entry.key().id() }}">{{entry.title}}</a>
 							</div>
-							<div class="date-concern short">
-								<small><i>(not implemented)</i></small>
-								<img src="http://placehold.it/30x30&text=1" class="img-circle">
-								<span>+X</span>
-							</div>
+
+							<!-- If there are less than two concerned users (or maybe groups later), show their avatars. -->
+							{% if entry.concerned_users|length <= 2 %}
+								<div class="date-concern">
+									{% for person in entry.concerned_users %}
+										<img src="/images/avatare/{{ entry.get_concerned_avatar(person) }}" class="img-circle avatar-xs" alt="{{ person }}">
+									{% endfor %}
+								</div>
+
+							<!-- Otherweise show only the shortened version of concerned users with the first user in the list showing an avatar and the rest hidden. -->
+							{% else %}
+								<div class="date-concern short">
+									<img src="/images/avatare/{{ entry.get_concerned_avatar(entry.concerned_users|first()) }}" class="img-circle avatar-xs" alt="{{ entry.concerned_users|first() }}">
+									<span>+{{ entry.concerned_users|length - 1 }}</span>
+								</div>
+							{% endif %}
+
 							<div class="date-date">
 								{{entry.start_date.strftime("%d.%m.%Y")}}
 								{% if entry.end_date %} - {{entry.end_date.strftime("%d.%m.%Y")}}{% endif %}
@@ -38,13 +50,16 @@
 								{% if entry.description %}
 									{{entry.description}}
 								{% else %}
-									<small><i>(Kurzbeschreibung not implemented)</i></small>
+									<small><i>(n/i)</i></small>
 								{% endif %}
 							</div>
 							{% if nutzer.username == "Admin" or nutzer.username == entry.author.username %}
-								<div class="date-controls">✎</div>
-								<div class="date-controls">✖</div>
-								<form method="post"><button type="submit" name="delete_date" value="{{entry.key().id()}}" class="btn-link btn-xs">Löschen</button></form>
+								<div class="date-controls">
+									<button type="" name="edit_date" value="" class="btn-link btn-xs">✎</button>
+								</div>
+								<div class="date-controls">
+									<form method="post"><button type="submit" name="delete_date" value="{{entry.key().id()}}" class="btn-link btn-xs">✖</button></form>
+								</div>
 							{% endif %}
 						</div>
 					{% endfor %}

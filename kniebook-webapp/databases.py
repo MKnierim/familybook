@@ -155,7 +155,7 @@ class Calendar(db.Model):
 	title = db.StringProperty(required=True)
 	description = db.TextProperty()
 	author = db.ReferenceProperty()
-	concerned_users = db.ListProperty(str)
+	concerned_users = db.ListProperty(str)		# It would be a nice idea to create my own property class here by extending the db.ListProperty() to store an array of db.ReferenceProperty objects or unique identifiers for user ids...
 	created = db.DateProperty(auto_now_add=True)
 	last_modified = db.DateTimeProperty(auto_now=True)
 

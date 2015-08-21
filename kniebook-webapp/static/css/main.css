@@ -62,7 +62,8 @@ a:hover {
 
 @media screen and (max-height: 800px) {
 	.container {
-		margin: 10px;
+		margin: 10px auto;
+		width: calc(100% - 20px);
 	}
 }
 
@@ -159,10 +160,17 @@ a:hover {
 	width: 100%;
 	margin-bottom: 10px;
 	overflow: auto;
+	background-color: #fff;
+	border: 1px dotted orange;
+	border-radius: 4px;
+}
+
+.date-row:last-of-type	{
+	margin-bottom: 0px;
 }
 
 .date-title {
-	width: calc(100% - 200px);
+	width: calc(100% - 190px);
 	float: left;
 	padding: 10px;
 }
@@ -186,15 +194,16 @@ a:hover {
 }
 
 .date-concern {
-	width: 100px;
+	width: 90px;
 	float: right;
-	padding: 5px 10px;
+	padding: 5px 5px 5px 10px;
+	text-align: right;
 }
 
 .date-concern.short {
 	background-image: url("/images/ui/date-multiple-icon.png");
 	background-repeat: no-repeat;
-	background-position: 7px 5px;
+	background-position: 13px 5px;
 }
 
 .date-concern span {
@@ -202,8 +211,12 @@ a:hover {
 }
 
 #date-list {
-	margin: 0;
-	width: 100%;
+	margin: 0 30px;
+	width: calc(100% - 60px);
+	background-color: #F29441;
+	border-color: #ccc;
+	border-radius: 4px;
+	padding: 10px;
 }
 
 #date-list h3 {
@@ -211,13 +224,19 @@ a:hover {
 	font-weight: bold;
 }
 
-#date-list div {
+/*#date-list div {
 	border: 1px solid orange;
-}
+}*/
 
 @media screen and (max-width: 480px) {
+	#date-list {
+		margin: 0;
+		width: 100%;
+	}
+
 	.date-title {
-		width: calc(100% - 100px);
+		width: calc(100% - 90px);
+		overflow: auto;
 	}
 
 	.date-date {
@@ -232,6 +251,7 @@ a:hover {
 
 /* ------------------------------------
  * Seasonal stylings
+ * Delete eventually? Seems redundant with separate css sheets
  * ------------------------------------
  */
 .btn-winter {
