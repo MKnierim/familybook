@@ -17,9 +17,24 @@
 			{% if dates %}
 				<div id="date-list">
 					<!-- Date header -->
-					<!-- Not implemented -->
+						<!-- Not implemented -->
 
 					{% for entry in dates %}
+
+						<!-- Check if a displayed entry is the first in it's month and if so display the months name in a header. -->
+						{% if loop.first %}
+							<div class="date-month">
+								{{ entry.start_date.strftime("%B") }}
+							</div>
+							{% set last_entry = entry %}
+						{% else %}
+							{% if entry.start_date.month > last_entry.start_date.month %}
+								<div class="date-month">
+									{{ entry.start_date.strftime("%B") }}
+								</div>
+							{% endif %}
+						{% endif %}
+
 						<!-- Single date row -->
 						<div class="date-row">
 							<div class="date-title">

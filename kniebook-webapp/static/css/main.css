@@ -169,6 +169,13 @@ a:hover {
 	margin-bottom: 0px;
 }
 
+.date-month {
+	width: 100%;
+	margin-bottom: 10px;
+	text-align: center;
+	color: #fff;
+}
+
 .date-title {
 	width: calc(100% - 190px);
 	float: left;
