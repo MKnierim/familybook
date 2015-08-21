@@ -35,3 +35,7 @@ a:hover {
 .btn-link:hover {
 	color: #294273;
 }
+
+#date-list {
+	background-color: #294273;
+}

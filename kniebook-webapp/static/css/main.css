@@ -177,13 +177,12 @@ a:hover {
 }
 
 .date-title {
-	width: calc(100% - 190px);
 	float: left;
 	padding: 10px;
 }
 
 .date-date {
-	width: 100px;
+	width: auto;
 	float: right;
 	padding: 10px;
 }
@@ -220,7 +219,7 @@ a:hover {
 #date-list {
 	margin: 0 30px;
 	width: calc(100% - 60px);
-	background-color: #F29441;
+	background-color: #CCC;
 	border-color: #ccc;
 	border-radius: 4px;
 	padding: 10px;
