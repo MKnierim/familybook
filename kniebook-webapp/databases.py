@@ -264,6 +264,20 @@ class Calendar(db.Model):
 		concerned_user = User.by_name(username)
 		return concerned_user.avatar
 
+	#	Method to return a truncated description (if
+	# full version exceeds specified limit for display size).
+	def get_short_description(self):
+		trunc_desc = ""
+
+		# return self.description
+		if len(self.description) > 80:
+			trunc_desc = self.description[:80] + "..."
+			return trunc_desc
+
+		else:
+			return self.description
+
+
 # class Post(db.Model):
 # 	title = db.StringProperty(required=True)
 # 	content = db.TextProperty(required=True)

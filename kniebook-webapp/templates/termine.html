@@ -46,13 +46,16 @@
 								{{entry.start_date.strftime("%d.%m.%Y")}}
 								{% if entry.end_date %} - {{entry.end_date.strftime("%d.%m.%Y")}}{% endif %}
 							</div>
+
 							<div class="date-description">
 								{% if entry.description %}
-									{{entry.description}}
+									<!-- Get the description that is shortened if it is over a specified size limit -->
+									<small>{{ entry.get_short_description() }}</small>
 								{% else %}
-									<small><i>(n/i)</i></small>
+									<small>Es wurde für diesen Termin keine nähere Beschreibung eingetragen.</small>
 								{% endif %}
 							</div>
+
 							{% if nutzer.username == "Admin" or nutzer.username == entry.author.username %}
 								<div class="date-controls">
 									<button type="" name="edit_date" value="" class="btn-link btn-xs">✎</button>
