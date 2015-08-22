@@ -60,10 +60,10 @@ a:hover {
 	margin-bottom: 60px;
 }
 
-@media screen and (max-height: 800px) {
+@media screen and (max-width: 767px) {
 	.container {
 		margin: 10px auto;
-		width: calc(100% - 20px);
+		max-width: calc(100% - 20px);
 	}
 }
 
@@ -157,9 +157,13 @@ a:hover {
  * ------------------------------------
  */
 .date-row	{
+	display: -webkit-box;
+	display: -moz-box;
+	display: -ms-flexbox;
+	display: -webkit-flex;
+	display: flex;
 	width: 100%;
 	margin-bottom: 10px;
-	overflow: auto;
 	background-color: #fff;
 	border: 1px dotted orange;
 	border-radius: 4px;
@@ -176,34 +180,35 @@ a:hover {
 	color: #fff;
 }
 
-.date-title {
-	float: left;
+.date-date {
+	min-width: 90px;
 	padding: 10px;
+	text-align: right;
+	order: 1;
 }
 
-.date-date {
-	width: auto;
-	float: right;
+.date-title {
+	width: calc(100% - 240px);
 	padding: 10px;
+	order: 0;
 }
 
 .date-description {
-	width: calc(100% - 60px);
-	float: left;
+	width: auto;
 	padding: 10px;
+	order: 3;
 }
 
 .date-controls {
 	width: 30px;
 	padding: 10px;
-	float: left;
+	order: 3;
 }
 
 .date-concern {
-	width: 90px;
-	float: right;
+	min-width: 90px;
 	padding: 5px 5px 5px 10px;
-	text-align: right;
+	order: 2;
 }
 
 .date-concern.short {
@@ -234,24 +239,49 @@ a:hover {
 	border: 1px solid orange;
 }*/
 
+@media screen and (max-width: 767px) {
+	.date-row {
+		flex-wrap: wrap;
+	}
+
+	.date-date {
+		min-width: 150px;
+	}
+
+	.date-description {
+		width: calc(100% - 60px);
+	}
+
+	.date-concern {
+		text-align: right;
+	}
+}
+
 @media screen and (max-width: 480px) {
-	#date-list {
-		margin: 0;
-		width: 100%;
+	.date-date {
+		text-align: left;
+		padding-bottom: 0;
+		order: 2;
 	}
 
 	.date-title {
 		width: calc(100% - 90px);
-		overflow: auto;
+		padding-bottom: 0;
 	}
 
-	.date-date {
-		float: left;
-		width: calc(100% - 60px);
+	.date-concern {
+		order: 1;
+		padding-bottom: 0;
 	}
 
 	.date-description {
-		display: none;
+		width: 100%;
+		padding-bottom: 0;
+	}
+
+	#date-list {
+		margin: 0;
+		width: 100%;
 	}
 }
 

@@ -4,50 +4,57 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Kniebook Testing - No script</title>
 	<link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="../static/css/main.css">
+	<!-- <link rel="stylesheet" type="text/css" href="../static/css/main.css"> -->
 	<style type="text/css">
 		* {
-		  -webkit-box-sizing:border-box;
-		  -moz-box-sizing:border-box;
-		  -o-box-sizing:border-box;
-		  -ms-box-sizing:border-box;
-		  box-sizing:border-box;
+			-webkit-box-sizing:border-box;
+			-moz-box-sizing:border-box;
+			-o-box-sizing:border-box;
+			-ms-box-sizing:border-box;
+			box-sizing:border-box;
 		}
 
 		.date-row	{
+			display: -webkit-box;
+			display: -moz-box;
+			display: -ms-flexbox;
+			display: -webkit-flex;
+			display: flex;
+			flex-wrap: wrap;
 			width: 100%;
 			margin-bottom: 10px;
-			overflow: auto;
-		}
-
-		.date-title {
-			width: calc(100% - 200px);
-			float: left;
-			padding: 10px;
 		}
 
 		.date-date {
-			width: 100px;
-			float: right;
+			width: 150px;
 			padding: 10px;
+			text-align: right;
+			order: 1;
+		}
+
+		.date-title {
+			width: calc(100% - 240px);
+			padding: 10px;
+			order: 0;
 		}
 
 		.date-description {
-			width: calc(100% - 60px);
-			float: left;
+			width: 100%;
 			padding: 10px;
+			order: 3;
 		}
 
 		.date-controls {
 			width: 30px;
 			padding: 10px;
-			float: left;
+			order: 4;
 		}
 
 		.date-concern {
-			width: 100px;
-			float: right;
-			padding: 5px 10px;
+			width: 90px;
+			padding: 5px 5px 5px 10px;
+			text-align: right;
+			order: 2;
 		}
 
 		.date-concern.short {
@@ -57,7 +64,7 @@
 		}
 
 		.date-concern span {
-			margin-left: 25px;
+			margin-left: 22px;
 		}
 
 		#date-list {
@@ -75,17 +82,17 @@
 		}
 
 		@media screen and (max-width: 480px) {
-			.date-title {
-				width: calc(100% - 100px);
-			}
-
 			.date-date {
-				float: left;
-				width: calc(100% - 60px);
+				text-align: left;
+				order: 2;
 			}
 
-			.date-description {
-				display: none;
+			.date-title {
+				width: calc(100% - 90px);
+			}
+
+			.date-concern {
+				order: 1;
 			}
 		}
 
@@ -95,19 +102,19 @@
 <body>
 	<!-- Container for dates -->
 	<div id="date-list">
+
 		<!-- Content row -->
 		<div class="date-row">
 			<div class="date-title">Titel Titel Titel Titel Titel Titel Titel Titel</div>
+			<div class="date-date">15.08.15 - 16.08.15</div>
+			<div class="date-description">Kurzbeschreibung Kurzbeschreibung Kurzbeschreibung Kurzbeschreibung Kurzbeschreibung Kurzbeschreibung Kurz...</div>
 			<div class="date-concern short">
 				<img src="http://placehold.it/30x30&text=1" class="img-circle">
-				<span>+X</span>
-				<!-- <img src="http://placehold.it/30x30&text=2"> -->
+				<span>+1</span>
 			</div>
-			<div class="date-date">15.08.2015</div>
-			<div class="date-description">Kurzbeschreibung Kurzbeschreibung Kurzbeschreibung Kurzbeschreibung Kurzbeschreibung Kurzbeschreibung Kurz...</div>
 			<div class="date-controls">✎</div>
 			<div class="date-controls">✖</div>
 		</div>
-	</div>
+
 </body>
 </html>

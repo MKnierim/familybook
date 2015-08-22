@@ -41,6 +41,19 @@
 								<a href="/termin/{{ entry.key().id() }}">{{entry.title}}</a>
 							</div>
 
+							<div class="date-date">
+								{{entry.start_date.strftime("%d.%m.%y")}}{% if entry.end_date %}<br>- {{entry.end_date.strftime("%d.%m.%y")}}{% endif %}
+							</div>
+
+							<div class="date-description">
+								{% if entry.description %}
+									<!-- Get the description that is shortened if it is over a specified size limit -->
+									<span>{{ entry.get_short_description() }}</span>
+								{% else %}
+									<span>Es wurde für diesen Termin keine nähere Beschreibung eingetragen.</span>
+								{% endif %}
+							</div>
+
 							<!-- If there are less than two concerned users (or maybe groups later), show their avatars. -->
 							{% if entry.concerned_users|length <= 2 %}
 								<div class="date-concern">
@@ -56,20 +69,6 @@
 									<span>+{{ entry.concerned_users|length - 1 }}</span>
 								</div>
 							{% endif %}
-
-							<div class="date-date">
-								{{entry.start_date.strftime("%d.%m.%Y")}}
-								{% if entry.end_date %} - {{entry.end_date.strftime("%d.%m.%Y")}}{% endif %}
-							</div>
-
-							<div class="date-description">
-								{% if entry.description %}
-									<!-- Get the description that is shortened if it is over a specified size limit -->
-									<small>{{ entry.get_short_description() }}</small>
-								{% else %}
-									<small>Es wurde für diesen Termin keine nähere Beschreibung eingetragen.</small>
-								{% endif %}
-							</div>
 
 							{% if nutzer.username == "Admin" or nutzer.username == entry.author.username %}
 								<div class="date-controls">
