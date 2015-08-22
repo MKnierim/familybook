@@ -26,6 +26,7 @@ To Do
 * Implement independent blogging function
 * Implement general error handling function, not just specific to 401,404, 500. [See Documentation](http://webapp-improved.appspot.com/guide/exceptions.html#guide-exceptions)
 * Refactor Code in smaller modules to facilitate reuse in later projects
+* Set locale on date-list to correctly display german month names
 
 Known Bugs
 -------------------------

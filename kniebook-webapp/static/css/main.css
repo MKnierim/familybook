@@ -181,44 +181,44 @@ a:hover {
 }
 
 .date-date {
-	min-width: 90px;
 	padding: 10px;
 	text-align: right;
 	order: 1;
+	flex: 0 0 140px;
 }
 
 .date-title {
-	width: calc(100% - 240px);
 	padding: 10px;
 	order: 0;
+	flex: 2 1 150px;
 }
 
 .date-description {
-	width: auto;
 	padding: 10px;
 	order: 3;
+	flex: 2 1 150px;
 }
 
 .date-controls {
-	width: 30px;
 	padding: 10px;
 	order: 3;
+	flex: 0 0 30px;
 }
 
 .date-concern {
-	min-width: 90px;
 	padding: 5px 5px 5px 10px;
 	order: 2;
+	flex: 0 0 90px;
 }
 
 .date-concern.short {
 	background-image: url("/images/ui/date-multiple-icon.png");
 	background-repeat: no-repeat;
-	background-position: 10px 5px;
+	background-position: 8px 5px;
 }
 
 .date-concern span {
-	margin-left: 25px;
+	margin-left: 24px;
 }
 
 #date-list {
@@ -245,11 +245,15 @@ a:hover {
 	}
 
 	.date-date {
-		min-width: 150px;
+		flex: 0 5 auto;
+	}
+
+	.date-title {
+		flex: 3 1 33%;
 	}
 
 	.date-description {
-		width: calc(100% - 60px);
+		flex: 8 1 80%;
 	}
 
 	.date-concern {
@@ -260,23 +264,20 @@ a:hover {
 @media screen and (max-width: 480px) {
 	.date-date {
 		text-align: left;
-		padding-bottom: 0;
+		flex: 0 0 100%;
 		order: 2;
 	}
 
 	.date-title {
-		width: calc(100% - 90px);
-		padding-bottom: 0;
+		flex: 3 1 50%;
 	}
 
 	.date-concern {
 		order: 1;
-		padding-bottom: 0;
 	}
 
 	.date-description {
-		width: 100%;
-		padding-bottom: 0;
+		flex: 0 0 100%;
 	}
 
 	#date-list {
