@@ -27,6 +27,8 @@ To Do
 * Implement general error handling function, not just specific to 401,404, 500. [See Documentation](http://webapp-improved.appspot.com/guide/exceptions.html#guide-exceptions)
 * Refactor Code in smaller modules to facilitate reuse in later projects
 * Set locale on date-list to correctly display german month names
+* Fix display problem with date-list when a user can see the editing buttons (disrupted layout because space is not reserved in cases when the user can edit and when he cannot)
+* Fix display of month on top of dates for different pages (i.e. termine.html/termine_archiv.html/main.html)
 
 Known Bugs
 -------------------------

@@ -192,7 +192,7 @@ class BackHandler(AppHandler):
 
 class MainHandler(AppHandler):
 	def get(self):
-		params = dict(current_week=databases.Calendar.get_current_week())
+		params = dict(dates=databases.Calendar.get_current_week())
 
 		# params["last_visit"] = databases.User.check_and_update_visit(self.nutzer).strftime("%d.%m.%Y")
 		# params["new_activities"] = databases.get_new_activities(self.nutzer, params["last_visit"])
@@ -336,7 +336,7 @@ class TermineHandler(AppHandler):
 
 class TermineArchivHandler(TermineHandler):		# Watch out, here a different class is inherited
 	def get(self):
-		params = dict(old_dates=databases.Calendar.get_dates_before())
+		params = dict(dates=databases.Calendar.get_dates_before())
 		self.render("termine_archiv.html", **params)
 
 	def post(self):
