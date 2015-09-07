@@ -1,5 +1,12 @@
-kniebook.de
+kniebook.de - Running Version
 =========================
+
+Version information
+-------------------------
+At the moment there are two versions for the app based on Python 2.7 and Java 7.80. The latter is currently being developed and the former represents the first build which is to be replaced. **This README presents an overview. However separate README files for both versions are written in the respective folders.**
+
+* Running core server-side technology: Python 2.7
+* Running version: p1.0
 
 Description
 -------------------------
@@ -19,17 +26,3 @@ Feature List
 * Error handling (401, 404, 500)
 * New user registration in admin area
 * Seasonal color schemes
-
-To Do
--------------------------
-* Implement commenting function on events
-* Implement independent blogging function
-* Implement general error handling function, not just specific to 401,404, 500. [See Documentation](http://webapp-improved.appspot.com/guide/exceptions.html#guide-exceptions)
-* Refactor Code in smaller modules to facilitate reuse in later projects
-* Set locale on date-list to correctly display german month names
-* Fix display problem with date-list when a user can see the editing buttons (disrupted layout because space is not reserved in cases when the user can edit and when he cannot)
-* Fix display of month on top of dates for different pages (i.e. termine.html/termine_archiv.html/main.html)
-
-Known Bugs
--------------------------
-
