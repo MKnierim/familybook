@@ -1,0 +1,41 @@
+body {
+	background-color: #D94B2B;
+}
+
+a {
+	color: #732817;
+}
+a:active,
+a:hover {
+	color: #D94B2B;
+}
+
+.error {
+	color: #F29441;
+}
+
+.btn-season {
+	color: #fff;
+	background-color: #732817;
+	border-color: #ccc;
+}
+
+.btn-season:hover,
+.btn-season:focus,
+.btn-season.focus {
+	color: #D94B2B;
+	text-decoration: none;
+}
+
+.btn-link {
+	color: #732817;
+	padding: 0;
+}
+.btn-link:active,
+.btn-link:hover {
+	color: #D94B2B;
+}
+
+#date-list {
+	background-color: #D94B2B;
+}

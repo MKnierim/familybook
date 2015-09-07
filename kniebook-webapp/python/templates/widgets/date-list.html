@@ -1,0 +1,74 @@
+<div id="date-list">
+	<!-- Date header -->
+		<!-- Not implemented -->
+
+	{% for entry in dates %}
+
+		<!-- Check if a displayed entry is the first in it's month and if so display the months name in a header. -->
+		{% if loop.first %}
+			<div class="date-month">
+				{{ entry.start_date.strftime("%B") }}
+			</div>
+			{% set last_entry = entry %}
+		{% else %}
+			{% if entry.start_date.month > last_entry.start_date.month %}
+				<div class="date-month">
+					{{ entry.start_date.strftime("%B") }}
+				</div>
+			{% endif %}
+		{% endif %}
+
+		<!-- Single date row -->
+		<div class="date-row">
+			<div class="date-title">
+				<a href="/termin/{{ entry.key().id() }}">{{entry.title}}</a>
+			</div>
+
+			<div class="date-date">
+				{{entry.start_date.strftime("%d.%m.%y")}}{% if entry.end_date %} - {{entry.end_date.strftime("%d.%m.%y")}}{% endif %}
+			</div>
+
+			<div class="date-description">
+				{% if entry.description %}
+					<!-- Get the description that is shortened if it is over a specified size limit -->
+					<span>{{ entry.get_short_description() }}</span>
+				{% else %}
+					<span>Keine nähere Beschreibung eingetragen.</span>
+				{% endif %}
+			</div>
+
+			<!-- If there are less than two concerned users (or maybe groups later), show their avatars. -->
+			{% if entry.concerned_users|length <= 2 %}
+				<div class="date-concern">
+					{% for person in entry.concerned_users %}
+						<img src="/images/avatare/{{ entry.get_concerned_avatar(person) }}" class="img-circle avatar-xs" alt="{{ person }}">
+					{% endfor %}
+				</div>
+
+			<!-- Otherweise show only the shortened version of concerned users with the first user in the list showing an avatar and the rest hidden. -->
+			{% else %}
+				<div class="date-concern short">
+					<img src="/images/avatare/{{ entry.get_concerned_avatar(entry.concerned_users|first()) }}" class="img-circle avatar-xs" alt="{{ entry.concerned_users|first() }}">
+					<span>+{{ entry.concerned_users|length - 1 }}</span>
+				</div>
+			{% endif %}
+
+			<!-- Controls to edit or delete a date -->
+			{% if nutzer.username == "Admin" or nutzer.username == entry.author.username %}
+				<div class="date-controls">
+					<button type="" name="edit_date" value="" class="btn-link btn-xs">
+						<a href="/termin/{{ entry.key().id() }}"><span class="glyphicon glyphicon-search"></span></a>
+					</button>
+				</div>
+				<div class="date-controls">
+					<form method="post">
+						<button type="submit" name="delete_date" value="{{entry.key().id()}}" class="btn-link btn-xs">
+							<span class="glyphicon glyphicon-remove"></span>
+						</button>
+					</form>
+				</div>
+			{% endif %}
+
+		</div>
+	{% endfor %}
+</div>

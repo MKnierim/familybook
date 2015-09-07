@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+	<div class="row">
+		<div class="col-md-12">
+			<hr>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h4>Diskussions-Einträge</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			{% if posts %}
+			{% else %}
+				<small>Es wurden leider noch keine Beiträge verfasst.</small>
+			{% endif %}
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<hr>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h4>Ein Thema erstellen</h4>
+			<small>Felder mit Asterisk (*) müssen ausgefüllt werden.</small>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<form method="post">
+				<div class="form-group">
+					<label>Titel*</label>
+					<input type="text" name="title" value="{{title}}" class="form-control form-full">
+					<div class="error">{{error_title}}</div>
+				</div>
+				<div class="form-group">
+					<label>Inhalt*</label>
+					<textarea name="content" value="{{content}}" class="form-control form-full" rows="6"></textarea>
+					<div class="error">{{error_content}}</div>
+				</div>
+				<input type="submit" value="Eintragen" class="btn btn-default">
+			</form>
+		</div>
+	</div>
+{% endblock %}

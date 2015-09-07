@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+	<div class="row">
+		<div class="col-md-12">
+			<hr>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h4>Alle vergangenen Termine</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			{% if dates %}
+				{% include "widgets/date-list.html" %}
+			{% else %}
+				<div class="text-center"><small>Es wurden keine Termine in der Vergangenheit gefunden.</small></div>
+			{% endif %}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<a href="/termine" class="btn btn-default">Zurück</a>
+		</div>
+	</div>
+
+{% endblock %}
