@@ -4,7 +4,7 @@
 My personal facebook clone just for my family to communicate news and document family events without publishing information to the general public.
 
 ## Version information
-At the moment there are two versions for the app based on Python 2.7 and Java 7.80. The latter is currently being developed and the former represents the first build which is to be replaced. **This README presents an overview. However separate README files for both versions are written in the respective folders.**
+...
 
 **I need to point out here, that this is not a finished version, but I wanted to put it out there
  for other that would like to build on it.**
