@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block header_title %} fa Back-End {% endblock %}
+
+{% block header_content %}
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h1><a href="/">familybook</a></h1>
+			<h3>Back-End</h3>
+		</div>
+	</div>
+{% endblock %}
+
+{% block main_content %}
+	<div class="row">
+		<div class="col-md-12">
+			<hr>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h4>User Overview</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-2">
+		</div>
+		<div class="col-md-8">
+			{% if users %}
+				<div class="table-responsive">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Nr.</th>
+								<th>Username</th>
+								<th>Birthday</th>
+								<th>Avatar</th>
+								<th>Control</th>
+							</tr>
+						</thead>
+						<tbody>
+						{% for entry in users %}
+							<tr>
+								<td>{{users.index(entry) + 1}}</td>
+								<td>{{entry.username}}</td>
+								<td>{{entry.birthday.strftime("%m/%d/%Y")}}</td>
+								<td><img src="imgs/avatars/{{entry.avatar}}"
+                                         class="img-responsive img-circle avatar-small"></td>
+								<td>
+                                    {% if entry.username != "Admin" %}
+									<form method="post">
+										<button type="submit" name="delete_user" value="{{entry
+										.username}}" class="btn btn-default btn-xs">Delete</button>
+									</form>
+                                    {% endif %}
+								</td>
+							</tr>
+						{% endfor %}
+						</tbody>
+					</table>
+				</div>
+			{% else %}
+				<p class="text-center">Unfortunately, no users have been registered so far.</p>
+			{% endif %}
+		</div>
+		<div class="col-md-2">
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h4>User Control</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 text-center">
+			<h5>Algorithms</h5>
+			<form method="post">
+				<button type="submit" name="btn-initialize-users" value="on" class="btn
+				btn-default">Initialize Demo Users</button>
+			</form>
+			<form method="post">
+				<button type="submit" name="btn-delete-all-users" value="on" class="btn
+				btn-default">Delete Demo Users</button>
+			</form>
+		</div>
+		<div class="col-md-6 text-center">
+			<h5>User Sign Up</h5>
+			<form method="post">
+				<input type="text" name="n_user" placeholder="New User" value="{{n_user}}"
+                       class="form-control" disabled>
+				<div class="error">{{error_username}}</div>
+				<input type="password" name="n_pw" placeholder="Password" class="form-control"
+                       disabled>
+				<div class="error">{{error_pw}}</div>
+				<button type="submit" value="on" name="create_new_user" class="btn btn-default"
+                        disabled>Create</button>
+			</form>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<hr>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h4>Date Control</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h5>Algorithms</h5>
+			<form method="post">
+				<button type="submit" name="btn-delete-all-dates" value="on" class="btn
+				btn-default">Delete All Dates</button>
+			</form>
+		</div>
+	</div>
+{% endblock %}

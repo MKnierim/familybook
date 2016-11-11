@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block header_title %} fa Error {% endblock %}
+
+{% block header_content %}
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h1><a href="/">familybook</a></h1>
+			<h3>Error</h3>
+		</div>
+	</div>
+{% endblock %}
+
+{% block nav_content %}
+{% endblock %}
+
+{% block main_content %}
+	<div class="row">
+		<div class="col-md-12">
+			<hr>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h4 class="space-bottom">Error {{errorcode}}</h4>
+			<p>
+			{% if errorcode == "401" %}
+                Unfortunately, you don't have access to this page.
+			{% elif errorcode == "404" %}
+                Unfortunately, the requested page could not be found.
+			{% elif errorcode == "500" %}
+                Unfortunately, an error occurred requesting this page.
+			{% endif %}
+			</p>
+			<p>If you have any questions, please contact the <a href="mailto:admin@familybook.com">system administrator</a>.</p>
+		</div>
+	</div>
+{% endblock %}

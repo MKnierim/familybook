@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+	<div class="row">
+		<div class="col-md-12">
+			<hr>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h4>Past Dates</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			{% if dates %}
+				{% include "widgets/date-list.html" %}
+			{% else %}
+				<div class="text-center"><small>Unfortunately, no past dates could be found.</small></div>
+			{% endif %}
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<a href="/dates" class="btn btn-default">Back</a>
+		</div>
+	</div>
+
+{% endblock %}

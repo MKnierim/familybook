@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block header_content %}
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h5>Welcome to the</h5>
+			<h1>familybook!</h1>
+			{% if user %}
+			<h3>{{user.username}}</h3>
+			{% endif %}
+		</div>
+	</div>
+{% endblock %}
+
+{% block nav_content %}
+{% endblock %}
+
+{% block main_content %}
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<img src="/imgs/avatars/mother-reg.jpg" class="img-circle front-img">
+            <img src="/imgs/avatars/father-reg.jpg" class="img-circle front-img">
+            <img src="/imgs/avatars/sister-reg.jpg" class="img-circle front-img">
+            <img src="/imgs/avatars/brother-reg.jpg" class="img-circle front-img">
+            <img src="/imgs/avatars/cousin-reg.jpg" class="img-circle front-img">
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<hr>
+		</div>
+	</div>
+
+	{% if user %}
+		<div class="row">
+			<div class="col-md-12 text-center">
+				<a href="/main" class="btn btn-season">News</a>
+				<a href="/dates" class="btn btn-season">Dates</a>
+				<!-- <a href="/forum" class="btn btn-season">Forum</a> -->
+				<!-- <a href="/blog" class="btn btn-season">Blog</a> -->
+				<a href="/settings" class="btn btn-season">Settings</a>
+				{% if user.username == "Admin" %}
+				<a href="/back" class="btn btn-season">Back-End</a>
+				{% endif %}
+				<a href="/logout" class="btn btn-season">Log Out</a>
+			</div>
+		</div>
+	{% else %}
+	<div class="row">
+		<div class="col-md-4"></div>
+		<div class="col-md-4 text-center">
+			<form method="post">
+				<label class="single-row-form-element">
+					<input type="text" name="user" placeholder="User" value="{{user}}"
+                           class="form-control" autofocus>
+				</label>
+				<label class="single-row-form-element">
+					<input type="password" name="password" placeholder="Password"
+                           value="{{passwort}}" class="form-control">
+				</label>
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" name="remember_check" value="yes">
+                        <small>Remember me</small>
+					</label>
+				</div>
+				<input type="submit" value="Log In" class="btn btn-default">
+			</form>
+			<div class="error">{{fehler}}</div>
+		</div>
+		<div class="col-md-4"></div>
+	</div>
+	{% endif %}
+{% endblock %}
+
+{% block footer_content %}
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h4>About the familybook</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-1"></div>
+		<div class="col-xs-10 text-center">
+			<p>
+                The familybook is an homage to the ever so more popular book of faces (or:
+                facebook). Contrary to its globally known and used cousin, the familybook is
+                dedicated to serve only a small community, your family! I know, who would have
+                thought... It is basically an attempt to invite your loved ones onto a platform
+                where you can punish each other with all the cat and baby pictures that you can
+                find.
+            </p>
+            <p>
+                In case of protest, you are encouraged to molest the <a
+                    href="mailto:admin@familybook.de">administrator</a> of this special community
+                . Be warned though, there is a strong possibility, that these messages might grow
+                old in the nether regions of this clan specific inbox. So, perseverance is advised.
+            </p>
+		</div>
+		<div class="col-xs-1"></div>
+	</div>
+{% endblock %}

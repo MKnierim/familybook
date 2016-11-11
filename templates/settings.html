@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<hr>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<img src="imgs/avatars/{{user.avatar}}" class="img-responsive img-circle
+			avatar-medium center-block">
+			<br>
+			<h5>{{user.username}}</h5>
+			<h5>User Data</h5>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<b>Birthday:</b> {{user.birthday.strftime("%m/%d/%Y")}}<br>
+			<b>E-Mail:</b> {% if user.email %}{{user.email}}{% else %}None given.{% endif %}
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<hr>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h4>Change User Settings</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 text-center">
+			<form method="post">
+				<div class="form-group">
+					<label>Change Password</label>
+					<input type="password" name="old_pw" placeholder="Old Password"
+                           class="form-control">
+					<input type="password" name="new_pw" placeholder="New Password"
+                           class="form-control">
+					<input type="password" name="new_pw_again" placeholder="Repeat New Password"
+                           class="form-control">
+					<button type="submit" name="btn_change_pw" value="on" class="btn
+					btn-default">Submit</button>
+					<div class="error">{{error_pw}}</div>
+					<div class="success">{{success_pw}}</div>
+				</div>
+			</form>
+		</div>
+		<div class="col-md-6 text-center">
+			<form method="post">
+				<div class="form-group">
+					<label>Change E-Mail</label>
+					<input type="text" name="new_email" placeholder="New E-Mail Address"
+                           class="form-control">
+					<button type="submit" name="btn_change_email" value="on" class="btn
+					btn-default">Submit</button>
+					<div class="error">{{error_email}}</div>
+					<div class="success">{{success_email}}</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<hr>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h4>Change Design Settings</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<form method="post">
+				<div class="form-group">
+					<label>Design Colors</label><br>
+					<button type="submit" name="change_design" value="winter" class="btn
+					btn-winter">Winter</button>
+					<button type="submit" name="change_design" value="spring" class="btn
+					btn-spring">Spring</button>
+					<button type="submit" name="change_design" value="summer" class="btn
+					btn-summer">Summer</button>
+					<button type="submit" name="change_design" value="autumn" class="btn
+					btn-autumn">Autumn</button>
+					<button type="submit" name="change_design" value="auto" class="btn btn-default">Auto</button>
+				</div>
+			</form>
+		</div>
+	</div>
+{% endblock %}

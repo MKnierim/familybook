@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block main_content %}
+	<div class="row">
+		<div class="col-md-12">
+			<hr>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h4>Blog Entries</h4>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			{% if posts %}
+			{% else %}
+				<small>Unfortunately, no blog posts have been made so far.</small>
+			{% endif %}
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<hr>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<h4>Write a Post</h4>
+			<small>Boxes with (*) need input.</small>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center">
+			<form method="post">
+				<div class="form-group">
+					<label>Title*</label>
+					<input type="text" name="title" value="{{title}}" class="form-control">
+					<div class="error">{{error_title}}</div>
+				</div>
+				<div class="form-group">
+					<label>Content*</label>
+					<textarea name="content" value="{{content}}" class="form-control" rows="6"></textarea>
+					<div class="error">{{error_content}}</div>
+				</div>
+				<input type="submit" value="Submit" class="btn btn-default">
+			</form>
+		</div>
+	</div>
+{% endblock %}
