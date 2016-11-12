@@ -72,10 +72,6 @@ def instantiate_default_users():
 	if not databases.User.by_name("Admin"):
 		databases.User.create_admin()
 
-	# Call database function to instantiate a guest account
-	# if not databases.User.by_name("Guest"):
-		# databases.User.create_guest()
-
 
 """
 WEB PAGE HANDLER CLASSES
@@ -359,7 +355,8 @@ class SettingsHandler(AppHandler):
 class DatesHandler(AppHandler):
 	# Render dates page with all events
 	def get(self):
-		params = dict(dates=databases.Calendar.get_dates_ahead())
+		params = dict(dates=databases.Calendar.get_dates_ahead(),
+					  users=databases.list_entries(databases.User, "birthday"))
 		self.render("dates.html", **params)
 
 	def post(self):
@@ -376,7 +373,9 @@ class DatesHandler(AppHandler):
 
 	# Edit a date event
 	def edit_date(self, post=None, post_id=None):
-		error = False
+		date_error = False
+		input_error = False
+
 		# Get all input from form elements and set up error messages
 		params = dict(start_date=self.request.get("start_date"),
 					  end_date=self.request.get("end_date"),
@@ -397,18 +396,19 @@ class DatesHandler(AppHandler):
 				params["concerned_users"].append(str(check))
 
 		# Check for date validity and return updated params
-		error, params = databases.Calendar.valid_dates(**params)
+		date_error, params = databases.Calendar.valid_dates(**params)
 		# Check for validity of all other inputs and return updated params
-		error, params = databases.Calendar.valid_input(**params)
+		input_error, params = databases.Calendar.valid_input(**params)
 
 		# Execute date editing or return with error messages
-		if error:
+		if date_error or input_error:
 			# Check for which page to return to with error messages
 			if post_id:
 				self.render("date_post.html", post=post, **params)
 				# self.redirect("/date/%s" % post_id)
 			else:
 				self.render("dates.html", dates=databases.Calendar.get_dates_ahead(), **params)
+
 		else:
 			databases.Calendar.input_date(post_id, **params)
 			time.sleep(.1)
@@ -444,7 +444,7 @@ class DatePostHandler(DatesHandler):
 		if not post:
 			self.abort(404)
 		else:
-			self.render("date_post.html", post=post)
+			self.render("date_post.html", post=post, users=databases.list_entries(databases.User, "birthday"))
 
 	def post(self, post_id):		# post_id needs to be passed here. Seems to be due to automatic passing of RE pattern in the WSGIApplication routing
 		btn_edit_date = self.request.get("edit_date")
@@ -455,7 +455,7 @@ class DatePostHandler(DatesHandler):
 			self.edit_date(post, post_id)		# Function call differs here to new event creation. Pass post_id for identification.
 			self.redirect("/dates")
 		elif btn_delete_date:
-			self.delete_date(btn_delete_date)
+			self.delete_date(self, btn_delete_date)
 			self.redirect("/dates")
 
 

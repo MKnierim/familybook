@@ -78,7 +78,7 @@ class User(db.Model):
 	password_hash = db.StringProperty(required=True)
 	birthday = db.DateProperty()
 	email = db.StringProperty()
-	avatar = db.StringProperty(default="guest-reg.jpg")
+	avatar = db.StringProperty(default="default-reg.jpg")
 	cal_color = db.StringProperty()
 	ui_color = db.StringProperty(default="auto", choices=["winter", "spring", "summer", 
 														"autumn", "auto"])
@@ -148,7 +148,6 @@ class User(db.Model):
 
 		for entry in family:
 			new_user = cls(username=entry[0],
-						   # password = entry[1],
 						   password_hash=security.make_pw_hash(entry[1]),
 						   birthday=entry[2],
 						   email=entry[3],
@@ -317,7 +316,10 @@ class Calendar(db.Model):
 	# Get the avatar image for a concerned user of an event
 	def get_concerned_avatar(self, username):
 		concerned_user = User.by_name(username)
-		return concerned_user.avatar
+		if User.by_name(username):
+			return concerned_user.avatar
+		else:
+			return "default-reg.jpg"
 
 	# Get a truncated description of the calendar event
 	def get_short_description(self):

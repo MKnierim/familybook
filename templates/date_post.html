@@ -75,25 +75,19 @@
 				<div class="form-group">
 					<label>Concerns*</label>
 					<div>
-                        {# Clearly this needs to be refactored so that list of potentially
-                        concerned users is createy dynamically #}
-						<label class="concern-cb">
-							<img src="/imgs/avatars/mother-reg.jpg" class="avatar-small
-							img-circle"><input type="checkbox" name="concern_mother" value="Mother" {% if "Mother" in post.concerned_users %}checked{% endif %}>
-						</label>
-						<label class="concern-cb">
-							<img src="/imgs/avatars/father-reg.jpg" class="avatar-small img-circle"><input type="checkbox" name="concern_father" value="Father" {% if "Father" in post.concerned_users %}checked{% endif %}>
-						</label>
-						<label class="concern-cb">
-							<img src="/imgs/avatars/sister-reg.jpg" class="avatar-small img-circle"><input type="checkbox" name="concern_sister" value="Sister" {% if "Sister" in post.concerned_users %}checked{% endif %}>
-						</label>
-						<label class="concern-cb">
-							<img src="/imgs/avatars/brother-reg.jpg" class="avatar-small img-circle"><input type="checkbox" name="concern_brother" value="Brother" {% if "Brother" in post.concerned_users %}checked{% endif %}>
-						</label>
-						<label class="concern-cb">
-							<img src="/imgs/avatars/cousin-reg.jpg" class="avatar-small img-circle"><input type="checkbox" name="concern_cousin" value="Cousin" {% if "Cousin" in post.concerned_users %}checked{% endif %}>
-						</label>
-					</div>
+                        {% for entry in users %}
+                            {%  if not entry.username == "Admin" and not entry.username ==
+                            "Guest" %}
+                                <label class="concern-cb">
+                                    <img src="/imgs/avatars/{{ entry.avatar }}" class="avatar-small
+                                    img-circle">
+                                    <input type="checkbox" name="concern_{{ entry.username.lower() }}"
+                                        value="{{ entry.username }}" {% if entry.username in
+                                        post.concerned_users %}checked{% endif %}>
+                                </label>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
 					<div class="error">{{error_concern}}</div>
 				</div>
 				<button type="submit" name="edit_date" value="on" class="btn

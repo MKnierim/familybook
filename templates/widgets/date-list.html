@@ -34,7 +34,7 @@
 					<!-- Get the description that is shortened if it is over a specified size limit -->
 					<span>{{ entry.get_short_description() }}</span>
 				{% else %}
-					<span>No description was given.</span>
+					<span>-</span>
 				{% endif %}
 			</div>
 
@@ -50,9 +50,9 @@
 			<!-- Otherwise show only the shortened version of concerned users with the first user in the list showing an avatar and the rest hidden. -->
 			{% else %}
 				<div class="date-concern short">
-					<img src="/imgs/avatars/{{ entry.get_concerned_avatar(entry
-					.concerned_users|first()) }}" class="img-circle avatar-xs" alt="{{ entry.concerned_users|first() }}">
-					<span>+{{ entry.concerned_users|length - 1 }}</span>
+                    <img src="/imgs/avatars/{{ entry.get_concerned_avatar(entry
+                    .concerned_users|first()) }}" class="img-circle avatar-xs" alt="{{ entry.concerned_users|first() }}">
+                    <span>+{{ entry.concerned_users|length - 1 }}</span>
 				</div>
 			{% endif %}
 
@@ -70,6 +70,13 @@
 							<span class="glyphicon glyphicon-remove"></span>
 						</button>
 					</form>
+				</div>
+            {% else %}
+                <div class="date-controls">
+                    <span class=""></span>
+				</div>
+				<div class="date-controls">
+                    <span class=""></span>
 				</div>
 			{% endif %}
 
